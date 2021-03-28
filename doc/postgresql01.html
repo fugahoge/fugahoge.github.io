@@ -1,0 +1,46 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <title>Postgres運用基礎コマンド</title>
+</head>
+<body>
+<div class="moz-text-plain"><pre wrap>
+Postgres運用基礎コマンド
+<a class="moz-txt-link-freetext" href="http://linuxexpert.ne.jp/modules/pukiwiki/101.html">http://linuxexpert.ne.jp/modules/pukiwiki/101.html</a>
+
+■データバックアップ（データダンプ）方法(1)
+
+pg_dump -f ファイル名 DB名
+
+
+■データ復旧（データリストア）方法(1)
+
+$ psql -d DB名 -f ファイル名
+※DBが存在する場合、一度削除して、再構築する必要があります。
+$ dropdb DB名
+$ createdb DB名
+
+■データバックアップ（データダンプ）方法(2)
+
+$ pg_dump -F c -f ファイル名.car DB名
+
+■データ復旧（データリストア）方法(2)
+
+$ createdb DB名 --encoding=EUC_JP
+$ pg_restore -d DB名 -F c ファイル名.car
+※DBが存在する場合、一度削除して、再構築する必要があります。
+$ dropdb DB名
+$ createdb DB名
+
+■バキューム方法
+
+$ vacuumdb -d DB名 -f
+※-fオプションを付けて実行する場合、DBへのアクセスを拒否します。
+
+■テーブルの行数確認
+データベースに入って
+
+SELECT COUNT(*) FROM テーブル名;
+</pre></div></body>
+</html>

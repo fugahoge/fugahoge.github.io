@@ -1,0 +1,400 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <title>Emacs クイックリファレンス</title>
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    Emacs クイックリファレンス<br>
+    <a class="moz-txt-link-freetext" href="http://www.unixuser.org/~euske/doc/emacsref/index.html">http://www.unixuser.org/~euske/doc/emacsref/index.html</a><br>
+    <br>
+    <h2>Emacs クイックリファレンス</h2>
+    <p> <a href="http://www.unixuser.org/%7Eeuske/doc/index.html">back</a>
+    </p>
+    <hr>
+    <h3> はじめに </h3>
+    <p> このマニュアルは emacs (あるいは mule) を使いはじめてまだ間もない頃の
+      人のためのものです。emacs を一度も使ったことのない人は残念ながら
+      対象としていません (そういう人には emacs 付属のチュートリアルをすすめます)。
+      これを読んでも emacs が快適に使えるようになるかどうかは<u>あなた次第</u>です。
+      emacs はマウスやカーソルキーで操作することもできますが、
+      これらを使っているようでは上達しないということも
+      覚えておいてください。このマニュアルはよその人にも読めるように書いた
+      つもりですが、基本的に csc (東工大 情報工学科 計算機室) で emacs を
+      使用する人を対象としています。そのため、日本語入力環境やメール環境については
+      必ずしもあなたのサイトとは一致しないかもしれませんので注意してください。
+    </p>
+    <hr>
+    <ol>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#basic">基
+          本的なこと</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#file">ファ
+          イル操作</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#cursor">カー
+          ソル移動</a> </li>
+      <li> <a
+href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#cutcopydel">カッ
+          ト / コピー / 削除</a> </li>
+      <li> <a
+href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#bufferwindow">バッ
+          ファ / ウインドウ操作</a> </li>
+      <li> <a
+href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#searchreplace">文
+          字列検索 / 置換</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#egg">日
+          本語入力 (egg)</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#skk">日
+          本語入力 (skk)</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#help">ヘ
+          ルプの使いかた</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#other">そ
+          の他覚えておくと便利なコマンド</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#regexp">正
+          規表現とは</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#mh-e">mh-e
+          の使いかた</a> </li>
+      <li> <a
+          href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#dired">dired
+          の使いかた</a> </li>
+      <li> <a
+href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#bufferlist">バッ
+          ファメニューの使いかた</a>
+      </li>
+    </ol>
+    <hr>
+    <a name="basic">
+      <h3> 1. 基本的なこと </h3>
+    </a>
+    <p> emacs においてはすべてはコマンド操作で行われます。
+      キーを押すと、そのキーに割り当てられている (これを、<u>束縛</u>あるいは
+      <u>バインド</u>されているとも呼ぶ) コマンドが実行されます。
+      この割り当てを変更することにより、自分の好みのキーで emacs を操作する
+      ことができます。(あまり使われないため) どのキーにも
+      割り当てられていないコマンドが沢山あって、
+      これらは M-x に続いてコマンド名を入力することで実行させることができます
+      (例えば C-n にはデフォルトで next-line というコマンドが割り当てられているため、
+      C-n を押すのと M-x next-line と入力するのでは同じ結果になる)。
+      また、キー操作は<u>コマンドの頭文字で覚えるようにする</u>と楽です
+      (以下に紹介するコマンドで<u>下線</u>が引いてあるところを参照)。
+      なお emacs のキー操作では、大文字小文字は区別されます。
+    </p>
+    <hr>
+    <a name="file">
+      <h3> 2. ファイル操作 </h3>
+    </a>
+    <pre> ・ C-x C-f (<u>f</u>ind-file)             ファイル読み込み...
+ ・ C-x C-s (<u>s</u>ave-buffer)           カレントバッファを保存
+ ・ C-x C-w (<u>w</u>rite-file)            カレントバッファを別名で保存...
+ ・ C-x i   (<u>i</u>nsert-file)           カーソル位置にファイルを挿入...
+</pre>
+    <hr>
+    <a name="cursor">
+      <h3> 3. カーソル移動 </h3>
+    </a>
+    いっぱいあるようですが、たとえば <tt>C-f</tt> と <tt>M-f</tt>
+    では動作が似てるので覚えるのはそんなに大変ではありません。
+    <pre> ・ C-f     (<u>f</u>orward-char)          1文字進む              (→)
+ ・ C-b     (<u>b</u>ackward-char)         1文字戻る              (←)
+ ・ C-n     (<u>n</u>ext-line)             次の (= next) 行へ     (↓)
+ ・ C-p     (<u>p</u>revious-line)         前の (= previous) 行へ (↑)
+ ・ M-f     (<u>f</u>orward-word)          1語進む
+ ・ M-b     (<u>b</u>ackward-word)         1語戻る
+ ・ C-e     (<u>e</u>nd-of-line)           行末へ
+ ・ C-a     (beginning-of-line)     行頭へ
+ ・ M-e     (forward-sentence)      文末へ
+ ・ M-a     (backward-sentence)     文頭へ
+ ・ M-&gt;     (end-of-buffer)         現在位置をマークしバッファ末尾へ
+ ・ M-&lt;     (beginning-of-buffer)   現在位置をマークしバッファ先頭へ
+ ・ C-v     (scroll-up)             1画面分進む
+ ・ M-v     (scroll-down)           1画面分戻る
+ ・ C-x L   (goto-<u>l</u>ine)             指定した行へ移動...
+ ・ C-l     (recenter)              カーソルが画面中央にくるようにする
+</pre>
+    <hr>
+    <a name="cutcopydel">
+      <h3> 4. カット / コピー / 削除 </h3>
+    </a>
+    <tt>Del</tt> と <tt>C-d</tt> をはやく使い分けられるようになりましょう。
+    <u>C-Space でマークした位置と現在のカーソル位置の間を region</u>と呼びます。
+    Emacs ではいろいろな操作を region に対して行うことができます。
+    <pre> ・ Del     (delete-backward-char)  カーソルの<u>左</u>の文字を削除
+ ・ C-d     (<u>d</u>elete-char)           カーソルの文字を削除
+ ・ C-k     (<u>k</u>ill-line)             行のカーソル以降を削除し kill-ring へ
+ ・ C-w     (kill-region)           region の範囲を<u>削除して</u> kill-ring へ
+ ・ M-w     (copy-region-as-kill)   region の範囲を<u>削除せず</u> kill-ring へ
+ ・ C-y     (<u>y</u>ank)                  kill-ring の内容をカーソル位置にはき出す
+ ・ M-y     (<u>y</u>ank-pop)              yank した内容を消去し、前の kill-ring を
+                                    はき出す <u>(yank の直後しか実行できない)</u>
+ ・ C-Space (set-mark-command)      現在のカーソル位置をマーク
+ ・ C-x h   (mark-w<u>h</u>ole-buffer)     現在のバッファ全体を region にする
+ ・ C-x C-x (e<u>x</u>change-point-and-mark) カーソル位置 ←→ マーク位置を交換
+ ・ C-o     (<u>o</u>pen-line)             カーソル位置から一行スペースを空ける
+ ・  ---    (kill-rectangle)        長方形に kill-region
+ ・  ---    (yank-rectangle)        長方形に yank
+ ・  ---    (open-rectangle)        長方形にスペースを空ける
+</pre>
+    <hr>
+    <a name="bufferwindow">
+      <h3> 5. バッファ / ウインドウ操作 </h3>
+    </a>
+    バッファとウインドウの概念を混同している人をよく見かけます。
+    まずはこの考えをしっかり頭に入れてください。
+    <pre> ・ C-x b   (switch-to-<u>b</u>uffer)      ウインドウのバッファを切り換える...
+ ・ C-x C-b (list-<u>b</u>uffers)          存在しているバッファ一覧を表示...
+ ・ C-x k   (<u>k</u>ill-buffer)           バッファそのものを消去する...
+ ・ C-x 0   (delete-window)         ウインドウを消去する
+ ・ C-x 1   (delete-other-windows)  ウインドウを画面いっぱいに広げる
+ ・ C-x 2   (split-window-vertically) 上下に 2分割 (C-x ^ で広げる)
+ ・ C-x 3   (split-window-horizontally) 左右に 2分割 (C-x { , C-x } で広げる)
+ ・ C-x o   (<u>o</u>ther-window)          カーソルを次のウインドウへ移動 (時計回り)
+</pre>
+    <hr>
+    <a name="searchreplace">
+      <h3> 6. 文字列検索 / 置換 </h3>
+    </a>
+    正規表現による検索を覚えると、すごく便利です。
+    なお、検索は、カーソルを移動させるとその位置で抜けられ、<tt>C-g</tt> を押すと
+    最初の位置で抜けられます。
+    <pre> ・ C-s     (i<u>s</u>earch-forward)       順方向に検索...
+ ・ C-r     (isearch-backward)      逆方向に検索...
+ ・ M-%     (query-replace)         文字列置換... (「!」で一度に置換できる)
+ ・  ---    (isearch-forward-regexp) 順方向に正規表現で検索...
+ ・  ---    (isearch-backward-regexp) 逆方向に正規表現で検索...
+ ・  ---    (query-replace-regexp)  正規表現で置換...
+</pre>
+    <hr>
+    <a name="egg">
+      <h3> 7. 日本語入力 (egg) </h3>
+    </a>
+    以下に挙げる操作は、
+    あなたの操作している Emacs に egg が入っている場合にのみ使用できます。
+    場合によっては、使用するのに何らかの設定をする必要があるかもしれませんが、
+    そのやりかたはサイトによって異なります。
+    <pre> ・ C-\     (toggle-egg-mode)       日本語入力モード on/off
+ ・ M-h     (fence-<u>h</u>iragana)        ひらがなに変換
+ ・ M-k     (fence-<u>k</u>atakana)        カタカナに変換
+ ・ C-p     (henkan-<u>p</u>revious-kouho) 前 (= previous) 候補に戻る
+ ・ C-i     (henkan-bunsetu-chijime) 文節を 1文字縮める
+ ・ C-o     (henkan-bunsetu-nobasi) 文節を 1文字伸ばす
+ ・ M-s     (henkan-<u>s</u>elect-kouho)   候補の一覧を表示...
+ ・  ---    (toroku-region)         region の文字を単語として登録...
+</pre>
+    <hr>
+    <a name="skk">
+      <h3> 8. 日本語入力 (skk) </h3>
+    </a>
+    以下に挙げる操作は、
+    あなたの操作している Emacs に skk が入っている場合にのみ使用できます。
+    場合によっては、使用するのに何らかの設定をする必要があるかもしれませんが、
+    そのやりかたはサイトによって異なります。
+    <pre> ・ C-x C-j (skk-mode)                日本語入力モード on/off
+ ・ x           前候補に戻る
+ ・ q           カタカナに変換、あるいは、ひらがな / カタカナ入力の切り替え
+ ・ C-j         全角かなモードにする、あるいは、現在の入力を確定する
+ ・ l           半角モードにする
+ ・ L           全角英字モードにする
+ ・ \           記号入力モードにする...
+ ・ @           現在の日付を挿入する
+</pre>
+    <hr>
+    <a name="help">
+      <h3> 9. ヘルプの使いかた </h3>
+    </a>
+    C-h を押すことによってヘルプモードに入ります。そのあとどんなキーを
+    押すかによって、ヘルプの機能が決定されます (? を押すと機能の一覧が表示される)。
+    ヘルプの出力は、たいてい *Help* という名前のバッファが作られそこに表示されます。
+    apropos は与えられた正規表現について Emacs が知っているすべてのことを
+    出力するため、非常に長大な出力が得られることがあるので注意しましょう。
+    <pre> ・ C-h f   (describe-<u>f</u>unction)     このコマンドは何をする ?
+ ・ C-h k   (describe-<u>k</u>ey)          このキー操作は何をする ?
+ ・ C-h w   (<u>w</u>here-is)              このコマンドはどこのキーにある ?
+ ・ C-h v   (describe-<u>v</u>ariable)     この変数は何を設定するもの ?
+ ・ C-h b   (describe-bindings)     現在のキー割り当ての一覧は ?
+ ・ C-h a   (command-<u>a</u>propos)       正規表現でコマンド名を検索
+ ・  ---    (apropos)               正規表現で関連するすべての名前を検索
+</pre>
+    <hr>
+    <a name="other">
+      <h3> 10. その他覚えておくと便利なコマンド </h3>
+    </a>
+    <pre> ・ C-g     (keyboard-quit)         現在実行中の操作を中止
+ ・ C-z     (suspend-emacs)         Emacs を一時停止する (アイコン化)
+ ・ C-u     (universal-argument)    次に入力するコマンドを 4回実行する
+                                    (2回押せば 16回)
+ ・ ESC 数字                        次に入力するコマンドを数字の回数だけ実行
+                                    (ESC 1 0 0 a なら 100個の a を入力)
+ ・ C-x u   (advertised-<u>u</u>ndo)       ひとつ前の操作を取り消し、元に戻す(undo)
+ ・ C-x C-c (save-buffers-kill-emacs) すべてのファイルを保存し emacs を終了
+ ・ C-x C-q (vc-toggle-read-only)   バッファの変更禁止を on/off 切り替え
+ ・ C-x (   (start-kbd-macro)       マクロの記録を開始
+ ・ C-x )   (end-kbd-macro)         マクロの記録を終了
+ ・ C-x e   (call-last-kbd-macro)   記録したマクロを実行
+ ・ M-q     (fill-paragraph)        今いる段落を強制的に桁揃え (= fill)
+ ・ C-x f   (set-<u>f</u>ill-column)       M-q の桁揃え位置を現カーソル位置に設定
+ ・  ---    (auto-fill-mode)        自動的に桁揃えするモードに
+ ・  ---    (untabify)              region 内のタブ文字をスペースに変換
+</pre>
+    <hr>
+    <a name="regexp">
+      <h3> 11. 正規表現とは </h3>
+    </a>
+    正規表現とは文字列を検索するためのパターンのことですが、ただ単に「これと
+    一致しているか」だけではなく、非常に複雑なパターンを検索することが
+    できます。正規表現によって実際に文字列を検索したり置換したりする方法は、
+    <a
+href="http://www.unixuser.org/%7Eeuske/doc/emacsref/index.html#searchreplace">文
+      字列検索 / 置換</a>のほうを見てください。
+    <pre>          .   任意の 1文字に一致
+         x*   x の 0回以上のくり返しに一致 (つまり、空列にも一致)
+         x+   x の 1回以上のくり返しに一致 (空列には一致しない)
+         x?   x の 0回または 1回の出現に一致
+       x\|y   x または y に一致
+      [...]   [ ] 内の文字にどれでも一致
+     [^...]   [ ] 内の文字<u>以外なら</u>どれでも一致
+          ^   行頭に一致
+          $   行末に一致
+         \&lt;   単語の始まりに一致 (すぐ前が空白や改行で、直後が英字など)
+         \&gt;   単語の終わりに一致 (すぐ前が英字で、直後が空白など)
+  \( ... \)   グループ化。これで囲んだ文字列は 1つの文字のように扱われる
+              (またこれで囲まれた文字列は置換の際に \1, \2 ... 等で利用可)
+         \\   「\」に一致
+</pre>
+    正規表現の例 :
+    <dl>
+      <dt> <tt>\&lt;[1-9][0-9]*\&gt;</tt> </dt>
+      <dd> 1〜9 の文字で始まり、あとに 0〜9 の文字が 0個以上つづく。
+        0個以上だから、ひとつもなくてもかまわない。ここで注意すべきなのは <tt>*</tt>という正規表現は「この直前のパターン」
+        だけに かかります。したがってここでは <tt>[1-9][0-9]</tt> というくり返しが 0個以上続くのではなくて <tt>[0-9]</tt>
+        というパターンだけが 0個以上 つづくという意味です。よってこのパターンに一致するのは数字ですが、 さらにこのパターンは<tt>\&lt;</tt>お
+        よび<tt>\&gt;</tt>で 囲まれているため、たとえば「a=123455;」の「234」だけに一致してしまう、
+        というようなことはありません。数字の前後は必ず単語の境界でなければいけない
+        のです。よってこのパターンは上の例では必ず「123455」に一致します。 </dd>
+      <dt> <tt>\&lt;0x[0-9A-Fa-f]+\&gt;</tt> </dt>
+      <dd> 前のパターンと似ていますが、これは C で使われている 16進表現 (0x7e など) に一致します。<tt>[0-9A-Fa-f]</tt>の
+        ようにいくつもの文字を指定できる ことを覚えてください。<tt>A-F</tt> と <tt>a-f</tt>
+        をわざわざ書くのは、 大文字でも小文字でも受けつけるようにするためですね。また、+ を使ったのは、 前のパターンと違って、*
+        を使うとまったくの空列にも一致してしまうからです。 </dd>
+      <dt> <tt>^[ <u>^I</u>]*$</tt> (<u>^I</u> を入力するにはタブキーを押す) </dt>
+      <dd> 最初に <tt>^</tt> があり、最後に <tt>$</tt> があるパターンだったら、
+        そのパターンが一行にまるまる一致しなければ一致とみなされません。 ここではそれを利用しています。正規表現の意味は「行頭があって、
+        空白またはタブだけが 0個以上続いて、行末になる」、つまり 一行がスペースまたはタブだけからなる、いわゆる「空白行」に
+        一致します。 </dd>
+      <dt> <tt>&lt;[^&lt;&gt;]+&gt;</tt> </dt>
+      <dd> これは HTML のタグを捜すものです。最初に &lt; ではじまり、 次に「&lt; でも &gt; でないもの」が
+        1個以上続きます。最後は &gt; で終わる、 このようなパターンが含まれている行を捜します。<tt>[^&gt;]</tt>
+        の代わりに <tt>.</tt> を使ったらと思うかもしれませんが、これではだめです。
+        正規表現はなるべく広い範囲に一致するように検索されるので、 <tt>&lt;.+&gt;</tt>というパターンでは 「<tt>&lt;title&gt;hoge&lt;/title&gt;</tt>」
+        などという文字列にもまるまる一致してしまうのです (先頭の &lt; と、 最後の &gt; に囲まれている)。それから +
+        ではなくて * ではどうか。 これでもいいのですが、これだと <tt>&lt;&gt;</tt> なんかにも
+        一致してしまうのです。<tt>&lt;[a-zA-Z]+&gt;</tt>にすると、今度は <tt>&lt;/h1&gt;</tt>な
+        どに一致できませんね。 </dd>
+      <dt> <tt>\(おい\)+</tt> </dt>
+      <dd> 上の例までは * や + は一文字に対してだけでしたが、 <tt>\(</tt> と <tt>\)</tt>
+        を使ってパターンをグループ化 することにより、文字列のくり返しに一致することができます。
+        この例はいささかバカっぽいですが「おいおいおいおい…」という 「おい」の一回以上のくり返しに一致します。 </dd>
+      <dt> <tt>「\([^」]+\)\1」</tt> </dt>
+      <dd> ちょっと複雑になります。まず“「”と“」”で囲まれているものを 捜すのは先の HTML
+        タグの例と同じですね。ところがこの“「”“」”の間の パターンは <tt>\(</tt> と <tt>\)</tt>で囲まれ
+        ています。 こうすることにより、ここで一致した文字列が<tt>\1</tt>という 変数に入ると考えてください。よって、ここでは<tt>\(</tt>…<tt>\)</tt>で
+        囲まれたパターンのすぐあとに \1 がくることにより「同じ文字列が 2度くり返す」ような文字列 (例えば「はおはお」など) を
+        見つけることができるのです。なお、パターンの中に 2度 <tt>\(…\)</tt> が出てくると、2度目の文字列は \2
+        という変数に入るように なっています。\3、\4 …など以下同様です。 </dd>
+      <dt> <tt>「\([^」]+\)」 → (置換) → &lt;h1&gt;\1&lt;/h1&gt;</tt> </dt>
+      <dd> \1 は置換においても使えます。これは正規表現を使った置換 (<tt>query-replace-regexp</tt>)
+        で使うもので“「”“」”により 囲まれている文字列を“&lt;h1&gt;”“&lt;/h1&gt;”で囲むようにします。
+        このように正規表現を使った置換を覚えると、今まで手作業で やっていたことがウソのように楽になります。
+      </dd>
+    </dl>
+    <hr>
+    <a name="mh-e">
+      <h3> 12. mh-e の使いかた </h3>
+    </a>
+    mh (mail handler) というメールを書いたり読んだり整理するための
+    一群のプログラムを、emacs 上から簡単に使えるようにしたのが mh-e です。
+    これが使えるかどうかはサイトによって違います。以下は
+    mh に入ったとき来たメールの一覧が見えている「mh フォルダモード」での
+    コマンドです。
+    <pre> ・ C-x RET (mh-rmail)              mh フォルダモードに入る
+ ・ C-x m   (mh-smail)              メールを送る...
+ ・ .       (mh-show)               メッセージを見る
+ ・ n       (mh-<u>n</u>ext-undeleted-msg) 次のメッセージへ行く
+ ・ p       (mh-<u>p</u>revious-undeleted-msg) 前のメッセージへ戻る
+ ・ a       (mh-reply)              そのメッセージの返事を書く...
+ ・ C-c C-y (mh-<u>y</u>ank-cur-msg)       (返事を書いているとき) 相手のメールを引用
+ ・ o       (mh-refile-msg)         メッセージに転送マークをつける (u で取消)
+ ・ d       (mh-<u>d</u>elete-msg)         メッセージに削除マークをつける (u で取消)
+ ・ u       (mh-undo)               つけたマークを取り消す
+ ・ M-f     (mh-visit-<u>f</u>older)       過去のメールを見る...
+ ・ x       (mh-e<u>x</u>ecute-commands)   マークをつけたメッセージを処理する
+ ・ q       (mh-<u>q</u>uit)               mh フォルダモードを抜ける
+</pre>
+    <hr>
+    <a name="dired">
+      <h3> 13. dired の使いかた </h3>
+    </a>
+    dired (ディレクトリエディット) はファイルやディレクトリを
+    いろいろ見てまわるのに便利なモードです。でも、これを使っていると
+    バッファがすごくたくさんできてしまうので、注意してください。
+    <pre> ・ C-x d   (<u>d</u>ired)                 dired モードに入る
+ ・ R       (dired-do-<u>r</u>ename)       ファイル名変更あるいはファイルの移動(mv)...
+                                    (マークしたファイルがあれば全てを移動)
+ ・ f       (dired-advertised-<u>f</u>ind-file) そのウインドウにファイルを表示
+ ・ v       (dired-<u>v</u>iew-file)       ファイルの中身を見るだけ (編集はしない)
+ ・ u       (dired-<u>u</u>nmark)          つけたマークをとり消す
+ ・ o       (dired-find-file-<u>o</u>ther-window) 別のウインドウにファイルを表示
+ ・ d       (dired-flag-file-<u>d</u>eletion) ファイルに削除マークをつける (u で取消)
+ ・ x       (dired-do-flagged-delete) 削除マークをつけたファイルを本当に削除...
+ ・ C       (dired-do-<u>c</u>opy)         ファイルをコピー (cp)...
+                                    (マークしたファイルがあれば全てをコピー)
+ ・ M       (dired-do-ch<u>m</u>od)        ファイルのパーミッションを変更(chmod)...
+ ・ g       (revert-buffer)         現在の表示を更新
+ ・ m       (dired-<u>m</u>ark)            ファイルをマークする
+                                    (これで移動やコピーがいっぺんにできる)
+ ・ q       (dired-<u>q</u>uit)            dired モードを抜ける
+</pre>
+    <hr>
+    <a name="bufferlist">
+      <h3> 14. バッファメニューの使いかた </h3>
+    </a>
+    Emacs ではいくつものバッファが開けます。また、ヘルプや mh-e や dired なども
+    それを使うと勝手にバッファを生成します。こうしているうちに、いまどの
+    バッファが存在していて、自分が編集しているのはどれなのか、わからなくなって
+    しまいます。このようなときはバッファメニューモードに入っていらないバッファを
+    削除しましょう (でも、バッファメニューモードもやはり、自分のバッファを
+    生成しますけど)。
+    <pre> ・ C-x C-b (list-<u>b</u>uffers)          バッファメニュー モードに入る
+ ・ d       (Buffer-menu-<u>d</u>elete)    バッファに削除マークをつける
+ ・ C-k     (Buffer-menu-delete)    バッファに削除マークをつける
+ ・ x       (Buffer-menu-e<u>x</u>ecute)   削除マークをつけたバッファを本当に削除
+ ・ o       (Buffer-menu-<u>o</u>ther-window) バッファを別ウインドウで開く
+ ・ f       (Buffer-menu-this-window) バッファをこのウインドウで開く
+ ・ s       (Buffer-menu-<u>s</u>ave)      バッファを保存
+ ・ %       (Buffer-menu-toggle-read-only) バッファの変更禁止を切り替え
+ ・ m       (Buffer-menu-<u>m</u>ark)      バッファをマーク
+ ・ 1       (Buffer-menu-<u>1</u>-window)  ウインドウを全開にしてバッファを開く
+ ・ 2       (Buffer-menu-<u>2</u>-window)  マークしたバッファを 2つのウインドウに開く
+ ・ q       (Buffer-menu-<u>q</u>uit)      バッファメニュー モードを抜ける
+</pre>
+    <p> mh、dired、バッファメニューを使ってみると、たいていの操作は
+      似ていることに気づくでしょう。どのモードでもマークして実行するという点では
+      同じです。このように、コマンド体系の「くせ」を早くつかむことが、
+      emacs を早く体得するうえでのポイントです。
+    </p>
+    <hr>
+    Last modified: Wed Sep 26 18:55:31 2001
+    <address>Yusuke Shinyama </address>
+    <br>
+  </body>
+</html>
+
+</body>
+</html>

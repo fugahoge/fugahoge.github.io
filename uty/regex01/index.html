@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>正規表現チェッカー（JavaScript版） | Softel labs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="css.css" rel="stylesheet">
+<style>
+#R table {width:100%;}
+#R table th {border-bottom:2px solid #ccc; padding:.2rem;}
+#R table td {border-bottom:1px solid #ccc; padding:.2rem;}
+</style>
+</head>
+<body>
+	<header>
+		<a class="brand" href="">SOFTEL labs <i class="fa fa-flask"></i></a>
+	</header>
+	<main>
+		<article>
+			<h1>正規表現チェッカー <small>JavaScript版</small></h1>
+			<form action="" onsubmit="exec(this); return false;">
+				<h3>正規表現</h3>
+				<p>
+					/<input type="text" name="ptn" value="(t.).*(t.)" placeholder="pattern" class="">/
+					<input type="checkbox" name="flgg" value="1" checked="">g
+					<input type="checkbox" name="flgi">i
+					<input type="checkbox" name="flgm">m
+					<input type="button" value="ヘルプ" class="btn btn-mini" onclick="$(&#39;#H&#39;).toggle();">
+				</p>
+				<div id="H" class="alert alert-info" hidden="">
+					<p>フラグは、次の値を任意の組み合わせで指定できます。</p>
+					<p>g ... グローバルなマッチ</p>
+					<p>i ... 大文字・小文字の無視</p>
+					<p>m ... 複数行に渡るマッチ</p>
+					<p>gオプションを指定すると、文字列の終わりまで繰り返し実行します。</p>
+					<p><a href="https://developer.mozilla.org/ja/docs/JavaScript/Reference/Global_Objects/RegExp">RegExp - JavaScript | MDN</a></p>
+				</div>
+
+				<h3>対象の文字列</h3>
+				<p><textarea name="tgt" cols="80" rows="10">test1@example.com
+test2@example.com
+test3@example.com
+test4@example.com
+test5@example.com</textarea></p>
+				<p><input type="submit" class="button button-primary" value="正規表現をチェックする"></p>
+			</form>
+
+			<h3>結果</h3>
+			<div id="R"><div class="alert">正規表現と対象となる文字列を入力して「正規表現をチェックする」ボタンをクリックしてください.</div></div>
+
+<script async="" src=""></script>
+
+		</article>
+	</main>
+	<footer>
+		<p><a href="">softel</a> :: <a href="">labs</a></p>
+	</footer>
+	<script src="js.js"></script>
+
+<script>
+function exec(f)
+{
+	$('#R').html('');
+	var pattern = f.ptn.value, flag = (f.flgg.checked ? 'g' : '') + (f.flgi.checked ? 'i' : '') + (f.flgm.checked ? 'm' : ''), str = f.tgt.value;
+	var a, aa = [];
+	var r = new RegExp(pattern, flag);
+	while ((a = r.exec(str)) != null) {
+		aa.push(a);
+		if (!r.global) break;
+	}
+	var trs = [];
+	for (var i = 0; i < aa.length; ++i) {
+	console.log(i);
+		var $tr = $('<tr></tr>');
+		$tr.append($('<td></td>').text(aa[i]['index'] + '文字目'));
+		$tr.append($('<td></td>').text(aa[i].shift()));
+		$tr.append($('<td></td>').text(aa[i]));
+		trs.push($tr);
+	}
+	if (trs.length) {
+		var $table = $('<table class="table table-hover"></table>');
+		var $thead = $('<thead><th>位置</th><th>マッチした文字列</th><th>キャプチャされた文字列</th></thead>');
+		var $tbody = $('<tbody></tbody>');
+		$tbody.append(trs);
+		$table.append($thead);
+		$table.append($tbody);
+		$('#R').append($table);
+	}
+}
+</script>
+
+
+</body></html>

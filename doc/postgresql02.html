@@ -1,0 +1,48 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <title>Postgres運用基礎コマンド(2)</title>
+</head>
+<body>
+<div class="moz-text-plain"><pre wrap>
+Postgres運用基礎コマンド(2)
+<a class="moz-txt-link-freetext" href="http://linuxexpert.ne.jp/modules/pukiwiki/104.html">http://linuxexpert.ne.jp/modules/pukiwiki/104.html</a>
+
+PostgreSQL においてもLinux同様ユーザという概念があり、同じようにユーザごと
+にデータベースやテーブルに対する権限を設定できます。
+
+○スーパーユーザ
+initdb コマンドでそのデータベースインスタンスを作成したユーザが、自動的に
+スーパーユーザとして登録されます。当然、そのデータベースインスタンスにおけ
+る全ての権限を持ち、 あらゆるコマンドを実行できます。
+
+○一般ユーザ
+一般ユーザは、ユーザ作成の際にどの程度の権限を与えるか選択できます。
+
+・選択できる権限
+Shall the new user be allowed to create databases?
+⇒新規DBを作成する権限
+Shall the new user be allowed to create more new users?
+⇒新規ユーザを追加する権限
+
+"postgres" ユーザになっていることが条件！！
+# su - postgres
+
+■ユーザの追加
+
+$ createuser hoge
+Shall the new user be allowed to create databases? (y/n)   "y"
+Shall the new user be allowed to create more new users? (y/n)  "n"
+CREATE USER
+
+■ユーザの削除
+
+$ dropuser hoge
+実行すると、何の確認もなしにいきなり削除されるので注意!!
+
+■ユーザ一覧の表示
+
+select usename from pg_user;
+</pre></div></body>
+</html>

@@ -1,0 +1,1650 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <title>Smart -Web Magazine</title>
+</head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    正規表現 | Smart -Web Magazine<br>
+    <a class="moz-txt-link-freetext" href="http://rfs.jp/sb/perl/02/09.html">http://rfs.jp/sb/perl/02/09.html</a><br>
+    <br>
+    <header class="entry-header">
+      <h1 class="entry-title">正規表現</h1>
+    </header>
+    <div class="entry-details"> <span class="po-date">2009年7月6日</span>
+      <a href="http://rfs.jp/sb/perl/02/09.html#comments"
+        class="po-comment" title="正規表現 へのコメント"><br>
+      </a>
+      <div class="related-links"> <span class="po-category">CATEGORY:</span>
+        <a href="http://rfs.jp/sb/perl/02" title="2部 Perl言語仕様 の投稿をすべて表示"
+          rel="category tag">2部 Perl言語仕様</a> <span class="po-tag">TAGS:</span>
+        <a href="http://rfs.jp/tag/chomp" rel="tag">chomp</a>, <a
+          href="http://rfs.jp/tag/command" rel="tag">command</a>, <a
+          href="http://rfs.jp/tag/dbi" rel="tag">DBI</a>, <a
+          href="http://rfs.jp/tag/foreach" rel="tag">foreach</a>, <a
+          href="http://rfs.jp/tag/perl" rel="tag">Perl講座</a>, <a
+          href="http://rfs.jp/tag/programming" rel="tag">programming</a>,
+        <a href="http://rfs.jp/tag/scripts" rel="tag">scripts</a>, <a
+          href="http://rfs.jp/tag/sprintf" rel="tag">sprintf</a>, <a
+          href="http://rfs.jp/tag/use" rel="tag">use</a>, <a
+          href="http://rfs.jp/tag/win32" rel="tag">win32</a> </div>
+    </div>
+    <h2><a name="■正規表現の概要">正規表現の概要</a></h2>
+    <p>正規表現は、Perlの中で最も重宝する機能のひとつです。正規表現にはテキスト処理のための様々な機能があり、文字列の中から特定のパ
+      ターンを見つけ出したり、置換したりすることができます。</p>
+    <h3><a name="正規表現の基本的な使用方法">正規表現の基本的な使用方法</a></h3>
+    <p>たとえば、$strという変数に格納したデータの中から、「A」で始まって途中は何があるかわからないが最後が「E」という文字列を探した
+      い場合、次のように記述することで、条件にマッチする文字列を見つけることができます。</p>
+    <div class="syntaxhighlighter " id="highlighter_65006">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ /A.*E/;</code></span></span></div>
+      </div>
+    </div>
+    <p>上記では、ドット( . )が改行以外の1文字を表し、アスタリスク( *
+      )がその任意の文字の0回以上の繰り返しを意味します。このように、正規表現において特殊な働きを持った文字を正規表現演算子、または<i>メ
+        タ文字</i>と呼びます。また、=~ は<i>パターン結合演算子</i>と呼ばれ、「左辺の値から右辺の値を検索する」という意味が
+      あります。</p>
+    <h3><a name="正規表現の構文">正規表現の構文</a></h3>
+    <h4>パターンマッチ演算子</h4>
+    <p class="box-config">
+      VALUE =~ /PATTERN/gimosx
+    </p>
+    <p>正規表現は、左辺の VALUE に格納されている文字列から右辺のPATTERN がマッチするかをチェックします。VALUE
+      のなかに PATTERN がマッチすれば 1（TRUE）を返し、マッチしなければ ""
+      （FALSE）を返します。通常、VALUEには変数を指定しますが、指定しない場合はデフォルトで特殊変数 $_ の値が使われます。<br>
+      正規表現の最後に付加している g、 i、 m、 o、 s、 xはオプションです。これらは必要に応じて使うことができます。</p>
+    <p>次の例では、変数　$methodに格納された文字列から大文字の「GET」と小文字の「get」を探します。正規表現の最後にある
+      iオプションは、大文字・小文字を区別しないように指示しています。</p>
+    <div class="syntaxhighlighter " id="highlighter_74750">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$method</code> <code
+                class="plain">=~ /GET/i;</code></span></span></div>
+      </div>
+    </div>
+    <p>正規表現の構文と、演算子については、<a
+href="http://rfs.jp/sb/perl/02/09.html#m//%20%E6%BC%94%E7%AE%97%E5%AD%90">m
+        演算子</a>で詳しく説明しています。</p>
+    <h4>パターンマッチ演算子の否定形</h4>
+    <p class="box-config">
+      VALUE !~ /PATTERN/gimosx
+    </p>
+    <p>この構文は構文1とは逆に、VALUE に PATTERN がマッチしない場合に 1 （TRUE）を返し、マッチすれば ""
+      （FALSE） を返します。</p>
+    <h4>置換演算子</h4>
+    <p class="box-config">
+      VALUE =~ s/PATTERN/REPLACE/egimosx
+    </p>
+    <p>置換演算子の構文は s/PATTERN/REPLACE/ となっています。この s 演算子は、指定されたPATTERN
+      を見つければ、それを REPLACE で置き換えます。</p>
+    <h3><a name="変数を使ったパターン">変数を使ったパターン</a></h3>
+    <p>PATTERNには、変数が含まれていてもよく、パターンが評価されるごとに変数が展開されます。特殊変数の$) と
+      $|は文字列の終わりを調べるパターンであると解釈されるので、展開されません。</p>
+    <div class="syntaxhighlighter " id="highlighter_423912">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/&lt;IMG </code><code
+                class="variable">$atr</code><code class="plain">&gt;/;</code></span></span></div>
+      </div>
+    </div>
+    <h2><a name="■正規表現のメタ文字">正規表現のメタ文字</a></h2>
+    <p>正規表現で特に重要なのがメタ文字です。正規表現のメタ文字はその文字自体を表すものではありません。メタ文字を使うと、「行頭にあるパ
+      ターンだけ
+      を探す」、「英数字を探す」、「大文字または小文字で始まるパターンだけを探す」など、さまざまな方法で検索パターンを指定することができま
+      す。<br>
+      メタ文字の逆の意味を持つのがリテラルで、正規表現で特殊な意味がなく、表記どおりの文字列として扱われます。</p>
+    <h5><a name="正規表現のメタ文字の一覧">正規表現のメタ文字の一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th align="left" nowrap="nowrap" valign="top">メタ文字</th>
+          <th align="left">説明</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\</b></td>
+          <td><b>直後の文字をエスケープする</b><br>
+            <br>
+            \
+            を使って後続の文字をエスケープすると、メタ文字をリテラルとしてマッチさせることができます。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>.</b></td>
+          <td><b>ワイルドカード。改行文字を除く任意の1文字にマッチ</b><br>
+            <br>
+            ただし、後述するパターンマッチ修飾子 /s が使われる場合は改行も含めて全てにマッチします。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>[a-z0-9]</b></td>
+          <td><b>[　]の中の任意の1文字にマッチ</b><br>
+            （例では、小文字または数字の任意の1文字）<br>
+            <br>
+            文字の間にハイフン( -
+            )を挟み、文字列の範囲を表すことができます。たとえば、[12345]の様に規則的に連続した文字列は、[1-5]
+            と表記できます。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>[^a-z0-9]</b></td>
+          <td><b>[　]の中にない任意の1文字にマッチ</b><br>
+            （例では、小文字または数字以外の任意の1文字）<br>
+            <br>
+            チルダ( ^ )は必ずパターンの先頭に置きます。<i> </i>先頭以外にある ^ はリテラルと解釈されます。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\d</b></td>
+          <td><b>数字の1文字にマッチ</b><br>
+            <br>
+            [0-9] と同じです。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\D</b></td>
+          <td><b>数字以外の1文字にマッチ</b><br>
+            <br>
+            [^0-9] と同じです。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\w</b></td>
+          <td><b>アルファベットまたは数字（単語）の1文字にマッチ</b><br>
+            <br>
+            [a-zA-Z_0-9] と同じです。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\W</b></td>
+          <td><b>アルファベットと数字以外（単語以外）の1文字にマッチ</b><br>
+            <br>
+            [^a-zA-Z_0-9] と同じです。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\s</b></td>
+          <td><b>空白文字にマッチ</b><br>
+            <br>
+            スペース、タブ、改行になります。[ \n\r\f\t] と同じです。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\S</b></td>
+          <td><b>空白文字以外にマッチ</b><br>
+            <br>
+            [^ \n\r\f\t] と同じです。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>A|B|C</b></td>
+          <td><b>選択一致パターン</b><br>
+            （例では、A、B、Cのいずれか1つの文字にマッチ）<br>
+            <br>
+            | の前後あるどちらかの正規表現にマッチします。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>（x）</b></td>
+          <td>文字列をグループ化<br>
+            <br>
+            カッコ内のパターンにマッチした文字列は記録されます。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>(?:...)</b></td>
+          <td>後方参照を行わないグループ化<br>
+            <br>
+            \1 や \2 を使用した後方参照が出来ません。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            <b>\1 または $1</b></td>
+          <td>グループ化にマッチした文字列を参照</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>文字にマッチさせる</h4>
+    <p>Aで始まり、その後に任意の2文字が続いた後、Dが続くパターン</p>
+    <div class="syntaxhighlighter " id="highlighter_294524">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/A..D/</code></span></span></div>
+      </div>
+    </div>
+    <p>123で始まり、後に1文字の数字が続くパターンを検索</p>
+    <div class="syntaxhighlighter " id="highlighter_963318">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/123\d/</code></span></span></div>
+      </div>
+    </div>
+    <h4>選択パターン</h4>
+    <p>a 、 b 、 c のどれかにマッチ</p>
+    <div class="syntaxhighlighter " id="highlighter_706">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">=~ /a|b|c/</code></span></span></div>
+      </div>
+    </div>
+    <p>選択一致パターン | を [...] で囲むと文字として判断されてしまうので、注意してください。</p>
+    <div class="syntaxhighlighter " id="highlighter_215201">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">=~ [a|b|c]; </code><code class="comments">#
+                「a|」 という文字列にマッチしてしまう</code></span></span></div>
+      </div>
+    </div>
+    <h4>文字集合</h4>
+    <p>[...]は、文字の集合を表し、そのうちのどれか1文字にマッチすれば
+      TRUEを返します。文字や数字の範囲を示したいときはハイフン( - )が使えます。</p>
+    <div class="syntaxhighlighter " id="highlighter_21083">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/[0-9]/ </code><code
+                class="comments"># 数字1文字とマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/[a-zA-Z]/ </code><code
+                class="comments"># 大文字・小文字を含めた英字1文字とマッチ</code></span></span></div>
+      </div>
+    </div>
+    <p>文字集合の中に、ハイフン( - )そのものを含めたい場合は、その前に逆スラッシュ( / )をおいて次のように書きます。</p>
+    <div class="syntaxhighlighter " id="highlighter_958771">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/[a-z\-]/ </code><code
+                class="comments"># 小文字のアルファベットかハイフンにマッチ</code></span></span></div>
+      </div>
+    </div>
+    <p>1、2、3のいずれでもない文字で始まるパターンを検索</p>
+    <div class="syntaxhighlighter " id="highlighter_715635">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/[^123]/</code></span></span></div>
+      </div>
+    </div>
+    <p>0から9までの数字1文字で始まり、次に1文字の「.」が続いてもよいパターンを検索（「?」は直前の文字が0個または1個ある事を表
+      す）。</p>
+    <div class="syntaxhighlighter " id="highlighter_2727">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/[0-9]\.?/</code></span></span></div>
+      </div>
+    </div>
+    <h4>文字列のグループ化と後方参照</h4>
+    <p>カッコは、文字や正規表現をグループにまとめます。また、グループにマッチした文字列は記録され、特別な変数によって参照することができま
+      す。これを<i>後方参照</i>といいます。参照の仕方は、カッコで囲んだグループの左から順に、\1、\2、\3... となります。</p>
+    <p>たとえば、「&lt;b&gt;Attension!&lt;/b&gt;」のようなHTMLタグにマッチさせるには次のようになります。</p>
+    <div class="syntaxhighlighter " id="highlighter_196430">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">m|&lt;(.*?)&gt;.*?&lt;/\1&gt;|</code></span></span></div>
+      </div>
+    </div>
+    <p>もしタグが&lt;b&gt;であれば、(.*?) の部分に b がマッチし、\1 は
+      bの値になります。その場合は「&lt;b&gt;任意の文字列&lt;/b&gt;」というパターンにマッチします。タグが
+      &lt;html&gt;であれば、「&lt;html&gt;任意の文字列&lt;/html&gt;」となります。</p>
+    <p>正規表現の外部では、特殊変数を使って $1、 $2、$3... で参照できます。</p>
+    <div class="syntaxhighlighter " id="highlighter_538325">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">= </code><code class="string">"Now I know
+                His strength is within me"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ /^(\w+)/; </code><code
+                class="comments"># 先頭の単語にマッチ</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$1</code><code class="plain">, </code><code
+                class="string">"\n"</code><code class="plain">; </code><code
+                class="comments"># マッチした値を表示</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt;Now</code></span></span></div>
+      </div>
+    </div>
+    <h4>マッチ変数</h4>
+    <p>後方参照の変数には上記のほかに、マッチ変数 $&amp; $` $'
+      $+があります。これらの変数を使うとプログラム内のすべての正規表現の処理が遅くなるので、注意して使ってください。</p>
+    <h5><a name="マッチ変数の一覧">マッチ変数の一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th align="left" nowrap="nowrap" valign="top">メタ文字</th>
+          <th align="left">説明</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            $&amp;</td>
+          <td>文字列の中でパターン全体がマッチした部分を参照</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            $`</td>
+          <td>文字列の中でマッチに先行する部分を参照</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            $'</td>
+          <td>文字列の中でマッチに続く部分を参照</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            $+</td>
+          <td>最後にマッチした文字列を返す</td>
+        </tr>
+      </tbody>
+    </table>
+    <h5>マッチ変数の使い方</h5>
+    <div class="syntaxhighlighter " id="highlighter_766054">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># 最後にマッチしたワードを配列に格納</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="keyword">while</code> <code
+                class="plain">( /\w+/g ){ </code><code
+                class="functions">push</code><code class="plain">( </code><code
+                class="variable">@words</code><code class="plain">,
+                $&amp; ) }</code></span></span></div>
+      </div>
+    </div>
+    <h4>選択一致パターンとグループ化の組み合わせ</h4>
+    <p>選択一致パターンの | は、文字列のグループ化と組み合わせて使うと効果的です。たとえば、Windows Me か Windows
+      Xp という単語を探したい場合は、次のように書くことができます。</p>
+    <div class="syntaxhighlighter " id="highlighter_151807">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/Windows (Me|Xp)/</code></span></span></div>
+      </div>
+    </div>
+    <p>ただ、グループ化すると自動的に後方参照用に記憶されるので、多少ではありますが処理が遅くなります。これを避けるには、後方参照を行わな
+      いグループ化の構文「(?:...)」を使います。</p>
+    <div class="syntaxhighlighter " id="highlighter_560519">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/Windows (?:Me|Xp)/ </code><code
+                class="comments"># マッチしたデータは記憶されない</code></span></span></div>
+      </div>
+    </div>
+    <h4>量指定子</h4>
+    <p>量指定子は、その直前の要素が何回マッチするかを指定します。たとえば、「a*」は0個以上の aにマッチします。</p>
+    <h5><a name="量指定子の一覧">量指定子の一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th align="left" nowrap="nowrap" valign="top">メタ文字</th>
+          <th align="left">説明</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            x<b>?</b></td>
+          <td><b>0個または1個の x にマッチ</b></td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            x<b>*</b></td>
+          <td><b>0個以上の x にマッチ</b></td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            x<b>+</b></td>
+          <td><b>1個以上の x にマッチ</b></td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            x<b>{</b>m,n<b>}</b></td>
+          <td><b>m 個以上、n 個以下の x にマッチ</b><br>
+            <br>
+            次のような使い方があります。<br>
+            <br>
+            {m} m 回の繰り返しにマッチ<br>
+            {m,} m 回以上の繰り返しにマッチ<br>
+            {m,n} m 回以上、n 回以下の繰り返しにマッチ</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>量指定子は可能な限り長いマッチを行います。次の例は、「care」と「me」に挟まれた単語を探したい場合の、間違った例です。</p>
+    <div class="syntaxhighlighter " id="highlighter_460824">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">= </code><code class="string">"care for
+                me, care for me"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ /care.*me/;</code></span></span></div>
+      </div>
+    </div>
+    <p>「.*」にマッチするのは「 for 」ではなく、「 for me, care for」までがマッチしてしまいます。</p>
+    <p>可能な限り短いマッチを行いたい場合は、量指定子と組み合わせて、最短マッチのメタ文字を使うことができます。使い方は、量指定子の後にク
+      エスチョン( ? )を追加します。</p>
+    <p class="box-config">
+      *? +? ?? ｛n｝? ｛n,｝? ｛n,m｝?
+    </p>
+    <p>これでようやく、「care」と「me」に挟まれた単語を探すことができます。</p>
+    <div class="syntaxhighlighter " id="highlighter_557770">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ /care.*?me/;</code></span></span></div>
+      </div>
+    </div>
+    <p>量指定子の後にクエスチョン( ? )があるので、最短マッチが行われ「 for 」がマッチします。</p>
+    <h5>基本的な繰り返しパターン検索</h5>
+    <div class="syntaxhighlighter " id="highlighter_302022">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/A?/ </code><code
+                class="comments"># 0個、または1個以上の A にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/A*/ </code><code
+                class="comments"># 0個以上の A にマッチ</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/A+/ </code><code
+                class="comments"># 1個以上の A にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/.?/ </code><code
+                class="comments"># 0個、または1個以上の任意の文字にマッチ</code></span></span></div>
+        <div class="line alt1"><code class="number">5.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/.*/ </code><code
+                class="comments"># 0個以上の任意の文字にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">6.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/.+/ </code><code
+                class="comments"># 1個以上の任意の文字にマッチ</code></span></span></div>
+      </div>
+    </div>
+    <h5>a が少なくとも1回、最大でも3回繰り返すパターンを検索</h5>
+    <div class="syntaxhighlighter " id="highlighter_453989">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/a{1,3}/</code></span></span></div>
+      </div>
+    </div>
+    <h5>a が3回繰り返すパターンを検索</h5>
+    <div class="syntaxhighlighter " id="highlighter_303298">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/a{3}/</code></span></span></div>
+      </div>
+    </div>
+    <h5>a が少なくとも1回以上続くパターンを検索</h5>
+    <div class="syntaxhighlighter " id="highlighter_116949">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/a{1,}/</code></span></span></div>
+      </div>
+    </div>
+    <h4>アンカー</h4>
+    <p>アンカーは、行頭や行末など、文字列中の位置にマッチします。行頭を表す ^ と行末を表す $はおぼえておいたほうがよいでしょう。</p>
+    <h5><a name="アンカーの一覧">アンカーの一覧</a></h5>
+    <div class="box-table">
+      <table class="table-format01">
+        <tbody>
+          <tr>
+            <th align="left" nowrap="nowrap" valign="top">メタ文字</th>
+            <th align="left">説明</th>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              <b>^</b></td>
+            <td><b>行頭</b></td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              <b>$</b></td>
+            <td><b>行末</b></td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \A</td>
+            <td>文字列の先頭</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \b</td>
+            <td>ワードの区切り<br>
+              <br>
+              ここでのワードとは、英数字とアンダースコア( _ )です。 </td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \B</td>
+            <td>ワードの区切り以外</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \G</td>
+            <td>文字列の先頭、もしくは修飾子 g
+              がついたパターンマッチングが終了した場所を記憶しておき、そこにマッチ</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \Z</td>
+            <td>文字列の最後</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p align="left">
+      \A と ^ 、\Z と $
+      は機能がよく似ているので注意してください。複数の行がある文字列を対象に正規表現を行った場合、^は改行の直後にもマッチしますが、\A
+      は文字列の先頭にしかマッチしません。<br>
+      \Z と $ の関係も \A と ^ に似ています。$ は改行の直前にもマッチしますが、\Zは文字列の最後にしかマッチングしません。</p>
+    <p align="left">　\b は、ワード境界とマッチします。ワード境界とは、\w と
+      \Wの間を指します。利便性のため、文字列の先頭と末尾もワード境界とされます。</p>
+    <div class="syntaxhighlighter " id="highlighter_544624">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\bLauｒｙｎ\b/</code></span></span></div>
+      </div>
+    </div>
+    <p align="left">　上記の正規表現は、「Lauryn
+      hill」にはマッチしますが、「Laurynhill」にはマッチしません。</p>
+    <h5>行頭のAを検索</h5>
+    <div class="syntaxhighlighter " id="highlighter_52145">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/^A/</code></span></span></div>
+      </div>
+    </div>
+    <h5>行末のZを検索</h5>
+    <div class="syntaxhighlighter " id="highlighter_944601">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/Z$/</code></span></span></div>
+      </div>
+    </div>
+    <p>$ は、改行の直前と文字列の末尾にマッチします。次のような正規表現は、改行を取り除いて出力します。</p>
+    <div class="syntaxhighlighter " id="highlighter_419593">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="string">"This is it, Ground zero.\n"</code> <code
+                class="plain">=~ /(.*)$/;</code></span></span></div>
+      </div>
+    </div>
+    <h3><a name="正規表現のエスケープシーケンス">正規表現のエスケープシーケンス</a></h3>
+    <h4>メタ文字をエスケープする</h4>
+    <p>ドメインには、メタ文字のドット( .
+      )が含まれているので、エスケープ処理が必要になります。メタ文字をエスケープするには、エスケープしたいメタ文字の直前に \
+      を置きます。</p>
+    <div class="syntaxhighlighter " id="highlighter_432723">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/rfs\.jp/</code></span></span></div>
+      </div>
+    </div>
+    <p>正規表現では以下のエスケープシーケンスが使えます。</p>
+    <h5><a name="エスケープシーケンスの一覧">エスケープシーケンスの一覧</a></h5>
+    <div class="box-table">
+      <table class="table-format01">
+        <tbody>
+          <tr>
+            <th align="left" nowrap="nowrap" valign="top">メタ文字</th>
+            <th align="left">説明</th>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \a</td>
+            <td>アラーム</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \c</td>
+            <td>制御文字</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \e</td>
+            <td>エスケープ文字</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \f</td>
+            <td>改ページ （form feed）<br>
+              <br>
+              ASCII での \x0c を表します</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              <b>\n</b></td>
+            <td><b>改行 （newline）</b><br>
+              <br>
+              ASCII での \x0x を表します</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \r</td>
+            <td>復帰文字 （return）<br>
+              <br>
+              ASCII での \x0d を表します</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              <b>\t</b></td>
+            <td><b>タブ （tab）</b><br>
+              <br>
+              ASCII での \x09 を表します</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \0</td>
+            <td>ヌル文字</td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \12</td>
+            <td><b>8進数の ASCII 値にマッチ</b></td>
+          </tr>
+          <tr>
+            <td class="td_strong" align="center" nowrap="nowrap"
+              valign="top">
+              \x811</td>
+            <td><b>16進数の ASCII 値にマッチ</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>スペースのメタ文字</h4>
+    <p>タブを検索</p>
+    <div class="syntaxhighlighter " id="highlighter_926826">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\t/</code></span></span></div>
+      </div>
+    </div>
+    <h3>テキスト修飾子</h3>
+    <p>テキスト修飾子は、大文字や小文字、または小文字から大文字への変換をしながらマッチングさせることができます。</p>
+    <h5><a name="テキスト修飾子の一覧">テキスト修飾子の一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th align="left" nowrap="nowrap" valign="top">メタ文字</th>
+          <th align="left">説明</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            \E</td>
+          <td>大文字、小文字変換の終了</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            \l</td>
+          <td>次の文字を小文字に変換</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            \L</td>
+          <td>\E までを小文字に変換</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            \Q</td>
+          <td>\E までのパターン指定メタ文字の意味を打ち消す</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            \u</td>
+          <td>次の文字を大文字に変換</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center" nowrap="nowrap"
+            valign="top">
+            \U</td>
+          <td>\E までを大文字に変換</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>\L は \E までの文字を小文字に変換、\U は\E までの文字を大文字に変換させます。</p>
+    <div class="syntaxhighlighter " id="highlighter_884575">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\Ugained/ </code><code
+                class="comments"># GEINED にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\LGAINED/ </code><code
+                class="comments"># gained にマッチ</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\Ug\Eained/ </code><code
+                class="comments"># Gained にマッチ</code></span></span></div>
+      </div>
+    </div>
+    <p>\l は次にくる文字を小文字に、\u は次に来る文字を大文字に変換します。</p>
+    <div class="syntaxhighlighter " id="highlighter_409229">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\ugained/ </code><code
+                class="comments"># Gained にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\lGAINED/ </code><code
+                class="comments"># gAINED にマッチ</code></span></span></div>
+      </div>
+    </div>
+    <p>\Q は \E までの正規表現メタ文字をエスケープ処理します。カッコ、アスタリスク( * )、ドット(
+      . )などのメタ文字を、リテラルとして解釈させたいときに有効です。\Q
+      を使えば、正規表現上の表記をスッキリさせることができるので、オススメです。メタ文字を使わない正規表現を書くときは、積極的に使用すると
+      いいでしょう。</p>
+    <div class="syntaxhighlighter " id="highlighter_41904">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/\Qrfs.jp/ </code><code
+                class="comments"># rfs.jp にマッチ</code></span></span></div>
+      </div>
+    </div>
+    <h3><a name="#ワード境界の罠">ワード境界の罠</a></h3>
+    <p>空白文字の集合を表す \s 、ワードの集合を現す \w 、ワードの境界を表す \b の組み合わせには十分な注意が必要です。</p>
+    <p>次の正規表現は、後ろに空白文字が続くワードを拾おうとしています。一見、まともな正規表現に見えますね。</p>
+    <div class="syntaxhighlighter " id="highlighter_58393">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/(\w+)\s+/;</code></span></span></div>
+      </div>
+    </div>
+    <p>「It is funny」というような文字列でしたら問題ないのですが、「It's
+      funny」というようにワード以外を含んだ文字列にはマッチしません。「It's」のシングルクォートの箇所がワードの区切りとなり、空白文字の直前に
+      ある「s」しか取り出せません。正解は次のようになります。</p>
+    <div class="syntaxhighlighter " id="highlighter_122781">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">/(\S+)\s+/;</code></span></span></div>
+      </div>
+    </div>
+    <p>このように、なるべく、\s の次には \S を続けるように注意しましょう。</p>
+    <h2><a name="■パターンマッチ演算子">パターンマッチ演算子</a></h2>
+    <h3><a name="m// 演算子">m// 演算子</a></h3>
+    <p>m// 演算子は、パターンマッチで文字列検索を行ないます。スカラコンテキストでは、マッチするごとにTRUE
+      を返し、最終的にマッチしなくなったときに FALSEを返します。対象の文字列を変更すると、検索位置は先頭にリセットされます。=~
+      演算子か !~ 演算子で検索対象の文字列を指定しなかったときは、$_ が検索対象となります。</p>
+    <p>区切文字が "/" のときには、最初の m を省略することができます。m
+      を付けるときには、英数字でも空白でもない、任意の文字のペアを区切文字として使うことができます。たとえば、パス名「/usr/local/bin
+      /perl」など「/」を含む文字列の場合は、mオプションで区切り文字を変更すると文がすっきりとします。
+    </p>
+    <div class="syntaxhighlighter " id="highlighter_241515">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">m|/usr/</code><code
+                class="keyword">local</code><code class="plain">/bin/perl|</code></span></span></div>
+      </div>
+    </div>
+    <h3><a name="リストコンテキストでのパターンマッチ">リストコンテキストでのパターンマッチ</a></h3>
+    <p>パターンマッチが、リスト値が要求されるコンテキストで使われると、パターンの中のカッコで括られた部分にマッチしたリストを返します。
+      マッチした
+      リストは、左から順に$1、$2、$3...と参照できます。マッチが失敗した場合には、空配列が返されます。マッチが成功した場合で、カッ
+      コが無い場合
+      には、リスト値が返されます。</p>
+    <div class="syntaxhighlighter " id="highlighter_788253">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">( </code><code
+                class="variable">$s1</code><code class="plain">, </code><code
+                class="variable">$s2</code><code class="plain">, </code><code
+                class="variable">$s3</code> <code class="plain">) = (
+                /^(\S+)\s+(\S+)\s*(.*)/ )</code></span></span></div>
+      </div>
+    </div>
+    <h3 class="pt-tips"><a name="#リストコンテキストにおける正規表現">リストコンテキストにおける正規表現</a></h3>
+    <p>リストコンテキストでは、マッチした値のリストを返し、マッチが失敗したら、空のリストを返します。</p>
+    <h5>$_ に格納された文字列から日付部分のみを取り出す</h5>
+    <div class="syntaxhighlighter " id="highlighter_292118">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">(</code><code
+                class="variable">$year</code><code class="plain">, </code><code
+                class="variable">$month</code><code class="plain">, </code><code
+                class="variable">$day</code><code class="plain">) =
+                /(\d+)-(\d+)-(\d+)/;</code></span></span></div>
+      </div>
+    </div>
+    <p>map の中でマッチを使うとさらに強力です。</p>
+    <div class="syntaxhighlighter " id="highlighter_388194">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># @date から
+                ^Date:\s+(.*) のパターンにマッチする要素を取り出す</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">(</code><code
+                class="variable">$date</code><code class="plain">) = </code><code
+                class="functions">map</code><code class="plain">{
+                /^Date:\s+(.*)/ } </code><code class="variable">@date</code><code
+                class="plain">;</code></span></span></div>
+      </div>
+    </div>
+    <h3>m// 演算子のオプション</h3>
+    <h5><a name="m// 演算子のオプションの一覧">m// 演算子のオプションの一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th nowrap="nowrap">オプション</th>
+          <th nowrap="nowrap">意味</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">
+            <a
+href="http://rfs.jp/sb/perl/02/09.html#g%20%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3">g</a></td>
+          <td>繰り返してマッチ</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">
+            <a
+href="http://rfs.jp/sb/perl/02/09.html#i%20%20%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3">i</a></td>
+          <td>英字の大文字、小文字を区別しない</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">
+            <a
+href="http://rfs.jp/sb/perl/02/09.html#m%20%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3">m</a></td>
+          <td>文字列を複数行として扱う</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">
+            <a
+href="http://rfs.jp/sb/perl/02/09.html#o%20%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3">o</a></td>
+          <td>PATTERNの評価を 1回だけにする</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">
+            <a
+href="http://rfs.jp/sb/perl/02/09.html#s%20%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3">s</a></td>
+          <td>ワイルドカードのドット( . )が改行にもマッチするようにする</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">
+            <a
+href="http://rfs.jp/sb/perl/02/09.html#x%20%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3">x</a></td>
+          <td>拡張正規表現を使用する</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4><a name="g オプション">g オプション</a>−繰り返してマッチ</h4>
+    <p>繰り返してマッチを行います。</p>
+    <h5>カッコを含んだ検索パターン</h5>
+    <p>カッコを含んだパターンの場合、マッチした全パターンに含まれる全ての部分文字列をリストにして返します。たとえば、変数$_ から
+      VARIABLE=VALUE という対を全て取り出してハッシュに代入することができます。</p>
+    <div class="syntaxhighlighter " id="highlighter_869691">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">%hash</code> <code
+                class="plain">= /(\b\w+)=(\S*)/g;</code></span></span></div>
+      </div>
+    </div>
+    <h5>配列でgオプションを指定</h5>
+    <p>配列に g オプションを指定すると、マッチしたもの全てをリストにして返します。</p>
+    <div class="syntaxhighlighter " id="highlighter_606212">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">push</code><code
+                class="plain">( </code><code class="variable">@list</code><code
+                class="plain">, /\w+/g );</code></span></span></div>
+      </div>
+    </div>
+    <h5>whileループの条件部に使う</h5>
+    <div class="syntaxhighlighter " id="highlighter_761607">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="keyword">while</code> <code
+                class="plain">( /\w+/g ){ </code><code
+                class="functions">push</code><code class="plain">( </code><code
+                class="variable">@words</code><code class="plain">,
+                $&amp; ) }</code></span></span></div>
+      </div>
+    </div>
+    <h4><a name="i オプション">i&nbsp; オプション</a>−英字の大文字、小文字を区別しない</h4>
+    <p>i オプション(Insensitive) は大文字と小文字を区別しないでマッチングしたいときに使います。</p>
+    <div class="syntaxhighlighter " id="highlighter_484922">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># "a" と "A" にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">=~ /a/i;</code></span></span></div>
+      </div>
+    </div>
+    <h4><a name="m オプション">m オプション</a>-文字列を複数行として扱う</h4>
+    <p>m オプションは、対象のパターンに改行が含まれていても、その改行にまたがってパターンを検索します。</p>
+    <div class="syntaxhighlighter " id="highlighter_816260">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># 文字列の途中に改行がある</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">= </code><code class="string">"With a gun
+                barrel between you\n teeth, you speak only in vowels."</code><code
+                class="plain">;</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># m
+                オプションは複数行にまたがるパターンにもマッチする</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">=~ /you teeth/m;</code></span></span></div>
+      </div>
+    </div>
+    <h4><a name="o オプション">o オプション</a>−PATTERNの評価を 1回だけにする</h4>
+    <p>oオプションは、対象となるパターンが変数を含んでいても、その変数は1回しか評価しません。これによって、実行時のパターンの再評価を避
+      けることができます。
+    </p>
+    <p>次の例は、ファイルから読み込んだ行に$argにセットされた文字列が含まれれば、その行を出力します。$argは変数というよりも、セッ
+      トされた文字列として評価されます。
+    </p>
+    <div class="syntaxhighlighter " id="highlighter_390474">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="keyword">while</code><code
+                class="plain">( </code><code class="variable">$s</code>
+              <code class="plain">= &lt;FH&gt; ){</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 36px
+              !important;"><code class="comments"># 一度だけ展開する</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 36px
+              !important;"><code class="keyword">if</code> <code
+                class="plain">( </code><code class="variable">$s</code>
+              <code class="plain">=~ /</code><code class="variable">$arg</code><code
+                class="plain">/o; ){ .... }</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">}</code></span></span></div>
+      </div>
+    </div>
+    <h4><a name="s オプション">s オプション</a>-ワイルドカードのドット( . )が改行にもマッチ</h4>
+    <p>ワイルドカードのドット( . )が改行にもマッチするようにします。</p>
+    <div class="syntaxhighlighter " id="highlighter_986422">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># 文字列の途中に改行がある</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">= </code><code class="string">"With a gun
+                barrel between you\n teeth, you speak only in vowels."</code><code
+                class="plain">;</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># ワイルドカードが改行にもマッチする</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">=~ /you.teeth/s;</code></span></span></div>
+      </div>
+    </div>
+    <h4><a name="x オプション">x オプション</a>-拡張正規表現を使用する</h4>
+    <p>x オプションは、PATTERN 内のスペースを無視して、コメントを使えるようにします。</p>
+    <div class="syntaxhighlighter " id="highlighter_398866">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># C言語のコメントにマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$s</code> <code
+                class="plain">=~ m{</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 36px
+              !important;"><code class="plain">/\* </code><code
+                class="comments"># 開始区切り文字にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 36px
+              !important;"><code class="plain">.*? </code><code
+                class="comments"># 最短一致でマッチ</code></span></span></div>
+        <div class="line alt1"><code class="number">5.</code><span
+            class="content"><span class="block" style="margin-left: 36px
+              !important;"><code class="plain">\*/ </code><code
+                class="comments"># 終了区切り文字にマッチ</code></span></span></div>
+        <div class="line alt2"><code class="number">6.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">}x;</code></span></span></div>
+      </div>
+    </div>
+    <p>→<a href="http://rfs.jp/sb/perl/05/m.html">m//</a></p>
+    <h2><a name="■置換演算子">置換演算子</a></h2>
+    <h3><a name="s/// 演算子">s/// 演算子</a></h3>
+    <p>s演算子は置換処置に使います。検索文字 PATTERNを使ってパターンを検索し、もし見つかれば、置換文字 REPLACE
+      で置き換え、置換した数を返します。見つからなければ、FALSE を返します。=~
+      演算子などによって文字列が指定されていなければ、$_ が使われます。</p>
+    <p>スラッシュ( / )の区切り文字以外にも、英数字、空白ではない任意の文字が使えます。シングルクォート( `
+      )を使うと置換文字列での展開はされません。バッククォートを使うと、置換文字列をコマンドとして実行して、その出力が実際の置換文字列に使われます。
+      PATTERNをカッコ類で括った場合には、REPLACE 用にもう一組の区切り文字を用意します。</p>
+    <div class="syntaxhighlighter " id="highlighter_863927">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># スラッシュ( /
+                )以外の区切り文字を使う</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$path</code> <code
+                class="plain">=~ s|/usr/bin|/usr/</code><code
+                class="keyword">local</code><code class="plain">/bin|;</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># カッコ類も可</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$path</code> <code
+                class="plain">=~ s(/usr/bin)(/usr/</code><code
+                class="keyword">local</code><code class="plain">/bin);</code></span></span></div>
+      </div>
+    </div>
+    <p>PATTERN や REPLACE の文字列に変数を含めると、文字列として展開されます。</p>
+    <div class="syntaxhighlighter " id="highlighter_314143">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$num</code> <code
+                class="plain">= </code><code class="string">'[0-9]+'</code><code
+                class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">= </code><code class="string">"test 1 2
+                3"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ s/</code><code class="variable">$num</code><code
+                class="plain">//gxo;</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$str</code><code class="plain">, </code><code
+                class="string">"\n"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt1"><code class="number">5.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; test</code></span></span></div>
+      </div>
+    </div>
+    <h5>s/// 演算子の応用</h5>
+    <p>g オプションを使って繰り返し置換</p>
+    <div class="syntaxhighlighter " id="highlighter_191917">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">s/&lt;[^&gt;]+&gt;/ /g;</code></span></span></div>
+      </div>
+    </div>
+    <p>置換した値を他の変数に代入</p>
+    <div class="syntaxhighlighter " id="highlighter_596392">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">= </code><code class="string">"if you
+                aint runnin game.\n"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">(</code><code
+                class="variable">$str2</code> <code class="plain">= </code><code
+                class="variable">$str</code><code class="plain">) =~
+                s/aint/are not/;</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$str</code><code class="plain">, </code><code
+                class="variable">$str2</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; </code><code
+                class="keyword">if</code> <code class="plain">you aint
+                runnin game.</code></span></span></div>
+        <div class="line alt1"><code class="number">5.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; </code><code
+                class="keyword">if</code> <code class="plain">you are
+                not runnin game.</code></span></span></div>
+      </div>
+    </div>
+    <p>マッチしたパターンの順番を入れ替える</p>
+    <div class="syntaxhighlighter " id="highlighter_442844">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">= </code><code class="string">"back
+                Looking"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ s/([^ ]*) *([^ ]*)/</code><code
+                class="variable">$2</code> <code class="variable">$1</code><code
+                class="plain">/; </code><code class="comments"># 最初の 2
+                語の入れ替え</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$str</code><code class="plain">, </code><code
+                class="string">"\n"</code><code class="plain">;s</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; Looking back</code></span></span></div>
+      </div>
+    </div>
+    <h3><a name="s/// 演算子用のオプション">s/// 演算子用のオプション</a></h3>
+    <h5><a name="s/// 演算子用のオプション一覧">s/// 演算子用のオプション一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th nowrap="nowrap">オプション</th>
+          <th nowrap="nowrap">意味</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">
+            <a
+href="http://rfs.jp/sb/perl/02/09.html#e%20%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3">e</a></td>
+          <td>式の右側の評価を行なう</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">ee</td>
+          <td>式の右側の評価を行い、実行後の戻り値を再度評価する</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">g</td>
+          <td>繰り返し置換</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">i</td>
+          <td>大文字、小文字を区別しないで検索</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">m</td>
+          <td>文字列を複数行として扱う</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">o</td>
+          <td>パターンの評価を 1 度だけにする</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">s</td>
+          <td>ワイルドカードのドット( . )が改行にもマッチするようにする</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">x</td>
+          <td>拡張正規表現を使用する</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4><a name="e オプション">e オプション</a>-REPLACE を式として評価</h4>
+    <p>e オプションは置換文字列を式として解釈し、eval します。</p>
+    <div class="syntaxhighlighter " id="highlighter_749609">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">s/\d+/</code><code
+                class="functions">sprintf</code><code class="plain">(</code><code
+                class="string">"%02d"</code><code class="plain">,$&amp;)/e;
+              </code><code class="comments"># マッチした文字列を sprintf
+                で整形&lt;br&gt;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">s/^=(\w+)/&amp;func(</code><code
+                class="variable">$1</code><code class="plain">)/e; </code><code
+                class="comments"># サブルーチン呼び出しを使う</code></span></span></div>
+      </div>
+    </div>
+    <p>その他のオプションについては <a
+href="http://rfs.jp/sb/perl/02/09.html#m//%20%E6%BC%94%E7%AE%97%E5%AD%90">m//
+        演算子</a>を参照してください。</p>
+    <h3><a name="tr/// 演算子">tr/// 演算子</a></h3>
+    <p>tr/// 演算子は検索文字列 SEARCH に含まれる各文字を、置換文字列 REPLACE
+      にマッチする文字に1文字ずつ変換します。REPLACEを省略すると、マッチした文字は削除されます。この関数は変換、もしくは削除した文
+      字数を返します。置換文字列が検索文字列より短い場合、対応する文字がない時は置換文字列中の最後の文字に置き換えられます。</p>
+    <p>tr/// 演算子の変わりに y/// 演算子を使うこともできます。 </p>
+    <h5><a name="tr/// 演算子のオプションの一覧">tr/// 演算子のオプションの一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th nowrap="nowrap">オプション</th>
+          <th nowrap="nowrap">意味</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">c</td>
+          <td>検索リストに指定された文字以外を検索</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">d</td>
+          <td>置換されなかった文字を削除</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="center">s</td>
+          <td>置換後の文字が重複している場合は削除して1つにつめる</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>tr/// の一般的な使い方</p>
+    <div class="syntaxhighlighter " id="highlighter_896360">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ </code><code class="functions">tr</code><code
+                class="plain">/A-Z/a-z/; </code><code class="comments">#
+                小文字に統一</code></span></span></div>
+      </div>
+    </div>
+    <p>tr は変数を展開しません。変数を使いたい場合には、eval() を使います。</p>
+    <div class="syntaxhighlighter " id="highlighter_638442">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="keyword">eval</code> <code
+                class="string">"tr/$search/$replace/, 1"</code> <code
+                class="plain">or </code><code class="keyword">die</code>
+              <code class="plain">$@;</code></span></span></div>
+      </div>
+    </div>
+    <h4>c オプション(Complement)</h4>
+    <p>cオプションは、検索文字列以外の文字を検索します。つまり、最初に指定する文字列に含まれていない文字を置換文字列の文字に変換します。</p>
+    <div class="syntaxhighlighter " id="highlighter_691329">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># 0から9以外の文字列を*に変換</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">ｔｒ/[0-9]/*/</code></span></span></div>
+      </div>
+    </div>
+    <h4>s オプション(Squeeze)</h4>
+    <p>s オプションは、検索文字列の文字が連続して複数個見つかった場合、それらを1文字に置き換えます。 </p>
+    <div class="syntaxhighlighter " id="highlighter_39142">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="comments"># 複数の「A」を1つの「A」に変換</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">tr</code><code
+                class="plain">/A/A/s</code></span></span></div>
+      </div>
+    </div>
+    <h4>d オプション(Delete)</h4>
+    <p>d オプションは、検索文字列の文字のうち置換文字列には含まれない文字をすべて削除します。 </p>
+    <h5>tr/// 演算子の様々な使い方</h5>
+    <div class="syntaxhighlighter " id="highlighter_963730">
+      <div class="lines">
+        <div class="line alt1"><code class="number">01.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$w</code> <code
+                class="plain">= </code><code class="string">'<a class="moz-txt-link-abbreviated" href="mailto:BOOK@RFS.JP">BOOK@RFS.JP</a>'</code><code
+                class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">02.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$w</code> <code
+                class="plain">=~ </code><code class="functions">tr</code><code
+                class="plain">/A-Z/a-z/; </code><code class="comments">#
+                小文字に正規化</code></span></span></div>
+        <div class="line alt1"><code class="number">03.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$w</code><code class="plain">,</code><code
+                class="string">"\n"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">04.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; book</code><code
+                class="variable">@rfs</code><code class="plain">.jp</code></span></span></div>
+        <div class="line alt1"><code class="number">05.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$cnt</code> <code
+                class="plain">= </code><code class="variable">$w</code>
+              <code class="plain">=~ </code><code class="functions">tr</code><code
+                class="plain">/././; </code><code class="comments"># $w
+                に含まれる . の数を数える</code></span></span></div>
+        <div class="line alt2"><code class="number">06.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$cnt</code><code class="plain">,</code><code
+                class="string">"\n"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt1"><code class="number">07.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; 1</code></span></span></div>
+        <div class="line alt2"><code class="number">08.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$w</code> <code
+                class="plain">=~ </code><code class="functions">tr</code><code
+                class="plain">/a-zA-Z/ /cs;&nbsp; </code><code
+                class="comments"># 英字以外をスペースに変換</code></span></span></div>
+        <div class="line alt1"><code class="number">09.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$w</code><code class="plain">,</code><code
+                class="string">"\n"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">10.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; book rfs jp</code></span></span></div>
+        <div class="line alt1"><code class="number">11.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$w</code> <code
+                class="plain">=~ </code><code class="functions">tr</code><code
+                class="plain">/a-zA-Z//s; </code><code class="comments">#
+                連続した単語をひとつにまとめる</code></span></span></div>
+        <div class="line alt2"><code class="number">12.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$w</code><code class="plain">,</code><code
+                class="string">"\n"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt1"><code class="number">13.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; bok rfs jp</code></span></span></div>
+      </div>
+    </div>
+    <p>→<a href="http://rfs.jp/sb/perl/05/s.html">s///</a><br>
+      →<a href="http://rfs.jp/sb/perl/05/tr.html">tr///</a></p>
+    <h2><a name="■拡張構文">拡張構文</a></h2>
+    <p>Perlの正規表現には、拡張構文があります。　正規表現の演算子は、その正規表現内すべての文字列に適用されますが、拡張構文を使用する
+      と、正規表現内で自由に正規表現演算子の機能を振り分けることができます。</p>
+    <p>拡張構文は、開きカッコと閉じカッコの間に、先頭の文字として疑問符 ( ? )
+      を置いたものです。その疑問符の次の文字により、拡張構文の機能が決まります。</p>
+    <h5><a name="拡張構文の一覧">拡張構文の一覧</a></h5>
+    <table class="table-format01">
+      <tbody>
+        <tr>
+          <th align="left" nowrap="nowrap" valign="top">メタ文字</th>
+          <th align="left">説明</th>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            <b>(?# コメント)</b></td>
+          <td>正規表現内にコメントを入れる際に使います。<br>
+            <br>
+            シャープ（#）以降の文字列はコメントとして解釈され、マッチングの対象から外れます。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            <b>(?:...)</b></td>
+          <td>( ... ) と同様にグループ化します。ただし、後方参照用の記録をしません。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            <b>(?=式)</b></td>
+          <td>前方一致検索です。<br>
+            たとえば、 /\w+(?=\t)/
+            は、単語に続いてタブがあるものにマッチしますが、$&amp; にはタブは含まれません。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            <b>(?!式)</b></td>
+          <td>後続の文字列が式に一致しなければマッチします。<br>
+            たとえば、/\w(?!\t)/ は、単語の後ろにタブがないものにマッチします。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            <b>(?ismx)</b></td>
+          <td>正規表現内にパターンマッチ修飾子を埋めみます。<br>
+            部分的に「大文字小文字の区別を行う」などの指定に役立ちます。部分的にパターンマッチ就職子の効果を与えたいとき、その部分の
+            前に指定します。たとえば、
+            /O(?i)ne/ は、One 、ONE など、O に続く文字 er
+            の大文字小文字を区別しません。(?i)修飾子の働きをオフにしたい場合は （?i‐...）
+            のように、‐ "ダッシュ"記号をつけます。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            <b>(?&lt;=式)</b></td>
+          <td>後方一致検索<br>
+            <br>
+            先行する文字列が式に一致すればマッチします。</td>
+        </tr>
+        <tr>
+          <td class="td_strong" align="left" nowrap="nowrap"
+            valign="top">
+            <b>(?&lt;!式)</b></td>
+          <td>後方一致検索の否定形<br>
+            <br>
+            先行する文字列が式に一致しなければマッチします。</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2><a name="■正規表現のテクニック">正規表現のテクニック</a></h2>
+    <h3>正規表現を速くするコツ</h3>
+    <p>正規表現はとても複雑ですから、最適な方法を見つけるのがとても大変です。まずは、次の注意点だけを気をつけるようにして、一日も早く正規
+      表現の世界に慣れましょう。</p>
+    <ul>
+      <li>正規表現内に変数がある場合、/o オプションを使って1度だけ評価するように指示する</li>
+      <li>マッチ変数を使わない（$` $&amp; $'）</li>
+      <li>選択パターン | の使用を避ける<br>
+        /a|b|c/ の代わりに /[abc]/ が使えます。</li>
+      <li>メモリを使わないカッコ(?:...)によって高速化（多少）<br>
+        /(?:\w+)/ など</li>
+    </ul>
+    <h3 class="pt-tips"><a name="正規表現を使わない">正規表現を使わない</a></h3>
+    <p>シンプルな文字列操作の多くは、正規表現よりも
+      index、rindex、substr、tr///などの専用の演算子の方が適しています。</p>
+    <div class="syntaxhighlighter " id="highlighter_832182">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">.. </code><code
+                class="keyword">if</code> <code class="variable">$method</code>
+              <code class="plain">=~ /^GET$/; </code><code
+                class="comments"># 遅い・・・</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">... </code><code
+                class="keyword">if</code> <code class="variable">$method</code>
+              <code class="plain">eq </code><code class="string">"GET"</code><code
+                class="plain">; </code><code class="comments">#
+                同じ意味ですが、高速です</code></span></span></div>
+      </div>
+    </div>
+    <p>文字列の一部を抜き出すには substr が適切です。</p>
+    <div class="syntaxhighlighter " id="highlighter_523733">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">= </code><code class="string">"We've
+                accomplished"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$str</code> <code class="plain">=~
+                /^.{6}(.{12})/, </code><code class="string">"\n"</code><code
+                class="plain">; </code><code class="comments"># 遅い・・・</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; accomplished</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="functions">substr</code><code class="plain">(</code><code
+                class="variable">$str</code><code class="plain">, 6,
+                12), </code><code class="string">"\n"</code><code
+                class="plain">; </code><code class="comments">#
+                速いし読みやすい</code></span></span></div>
+        <div class="line alt1"><code class="number">5.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt; accomplished</code></span></span></div>
+      </div>
+    </div>
+    <p>ついでに、substr は左辺に置くと置換に使えます。</p>
+    <div class="syntaxhighlighter " id="highlighter_288919">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">= </code><code class="string">"He has a
+                dryer.\n"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">substr</code><code
+                class="plain">( </code><code class="variable">$str</code><code
+                class="plain">, 9, 5) = </code><code class="string">"gun
+                in his pocket"</code><code class="plain">;</code></span></span></div>
+        <div class="line alt1"><code class="number">3.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">print</code> <code
+                class="variable">$str</code></span></span></div>
+        <div class="line alt2"><code class="number">4.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="plain">&gt;He has a gun in his
+                pocket.</code></span></span></div>
+      </div>
+    </div>
+    <h3 class="pt-tips"><a name="s/// 演算子の代わりに tr/// を使う">s/// 演算子の代わりに
+        tr/// を使う</a></h3>
+    <p>s/// 演算子は決めの細かい置換が行えますが、文字数の計算や、重複する文字の削除は tr/// のほうが高速です。</p>
+    <p>数字の桁数を数える</p>
+    <div class="syntaxhighlighter " id="highlighter_130167">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$cnt</code> <code
+                class="plain">= </code><code class="functions">tr</code><code
+                class="plain">/0-9//; </code><code class="variable">$_</code>
+              <code class="plain">数字の桁数を数える。</code></span></span></div>
+      </div>
+    </div>
+    <p>ウインドウズファイルをUNIX形式に変換</p>
+    <div class="syntaxhighlighter " id="highlighter_147129">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$_</code> <code
+                class="plain">= </code><code class="string">"-------\r\nTEST\r\n-------\r\n"</code><code
+                class="plain">;</code></span></span></div>
+        <div class="line alt2"><code class="number">2.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="functions">tr</code><code
+                class="plain">/\r//d;　</code><code class="comments"># \r
+                を削除</code></span></span></div>
+      </div>
+    </div>
+    <p>→<a href="http://rfs.jp/sb/perl/05/tr.html">tr///</a></p>
+    <h3 class="pt-tips"><a name="半角数字をチェックする">半角数字をチェックする</a></h3>
+    <p>変数の中がすべて半角の数字かどうかをチェックするには、次のようにします。</p>
+    <div class="syntaxhighlighter " id="highlighter_551785">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ /[0-9]+/</code></span></span></div>
+      </div>
+    </div>
+    <h3 class="pt-tips"><a name="文字列の末尾が改行かをチェックする">文字列の末尾が改行かをチェックする</a></h3>
+    <p>改行コードはオペレーティングシステムによって違います。UNIX 系 OS の改行は \n、ウインドウズは \r\n
+      、マッキントッシュは \r が使われています。次のコードはどの環境の改行コードにもマッチします。 </p>
+    <div class="syntaxhighlighter " id="highlighter_693239">
+      <div class="lines">
+        <div class="line alt1"><code class="number">1.</code><span
+            class="content"><span class="block" style="margin-left: 0px
+              !important;"><code class="variable">$str</code> <code
+                class="plain">=~ /[\r\n]/</code></span></span></div>
+      </div>
+    </div>
+    <br>
+  </body>
+</html>

@@ -1,0 +1,338 @@
+<!-- http://po.pos.to/po2/makepass.1.00.html -->
+<html><head>
+<script type="text/javascript">
+<!--
+//9:32 2003/08/20	ver. 1.00
+function randomize(sed){ // 意味なし
+	var i;
+	if (sed.length > 0){i=sed.charCodeAt(0);}
+	if (sed.length > 1){i = i+ 2 * sed.charCodeAt(1);}
+	i = (i % 256) + 1;
+	for (; i>0; i--)
+	{Math.random();}
+}
+
+function yura(number){ // 「ぐらいまで」を作ります
+	var a = number;
+	for (var i=1; i<number; i++){
+		a = a - Math.floor(Math.random() * (1 / i + .8));
+	}
+	return(a);
+}
+
+function opvalue(op){ // 選択されているオプションの value を得る
+	for (var i = 0; i < op.length; i++) {
+		if (op[i].checked) {
+			return(op[i].value);
+		}
+	}
+}
+
+function mkpass(n, chrs){ // n文字のパスワード作る chrsは使用する文字列
+	var a = "";
+	for (var i=0; i<n; i++){
+		a = a + chrs.charAt(Math.floor(Math.random() * chrs.length));
+	}
+	return(a);
+}
+
+function mkSimple(frm){
+	var usechr = "";
+	usechr = usechr + "0123456789";
+	usechr = usechr + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	usechr = usechr + "abcdefghijklmnopqrstuvwxyz";
+	randomize(frm.seed.value);
+	if (opvalue(frm.abt) == "fazy"){
+		frm.result.value = mkpass(yura(frm.chrs.value), usechr);
+	}else{
+		frm.result.value = mkpass(frm.chrs.value, usechr);
+	}
+}
+
+function mkDetailed(frm){
+	randomize(frm.seed.value);
+	frm.result.value = mkDetailedsub(frm);
+}
+
+function mkDetailedsub(frm){
+	var usechr = "";
+	if (frm.typen.checked){usechr = usechr + "0123456789";}
+	if (frm.typeu.checked){usechr = usechr + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";}
+	if (frm.typel.checked){usechr = usechr + "abcdefghijklmnopqrstuvwxyz";}
+	usechr = usechr + frm.types.value;
+	if (opvalue(frm.abt) == "fazy"){
+		return(mkpass(yura(frm.chrs.value), usechr));
+	}else{
+		return(mkpass(frm.chrs.value, usechr));
+	}
+}
+
+function mkHexmode(frm){
+	randomize(frm.seed.value);
+	frm.result.value = mkHexmodesub(frm);
+}
+
+function mkHexmodesub(frm){
+	var usechr = "0123456789ABCDEF";
+	if (opvalue(frm.abt) == "fazy"){
+		return(mkpass(yura(frm.chrs.value) * 2, usechr));
+	}else{
+		return(mkpass(frm.chrs.value * 2, usechr));
+	}
+}
+
+function mkDetailedbalk(frm){
+	randomize(frm.seed.value);
+	frm.result.value = "";
+	for (var i=0; frm.num.value>i; i++){
+	frm.result.value = frm.result.value + mkDetailedsub(frm)+"¥n";
+	}
+}
+
+function mkHexmodebalk(frm){
+	randomize(frm.seed.value);
+	frm.result.value = "";
+	for (var i=0; frm.num.value>i; i++){
+	frm.result.value = frm.result.value + mkHexmodesub(frm)+"¥n";
+	}
+}
+// -->
+</script></head>
+<div style="display: none;"><div id="diddlermain">
+	<div id="diddlertopBar" style="float: left; width: 100%;">
+		<a id="diddlertogg" href="#" style="float: left;">■</a>
+		<div id="diddlermuTab" class="diddlertab" style="border-bottom: 1px solid white; margin-left: 4px;">Markup</div>
+		<div id="diddlercssTab" class="diddlertab" style="background: rgb(175, 255, 5) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;">CSS</div>
+		<div id="diddlerhlpTab" class="diddlertab" style="background: rgb(175, 255, 5) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;">Help</div>
+	</div>
+	<div id="diddlercontent">
+		<br style="line-height: 23px;">
+		<div id="diddlermuDiv" class="diddlercontainingDiv">
+		  <textarea id="diddlermuOut" class="diddlerCodeTextarea" onkeyup="document.getElementsByTagName('body')[0].innerHTML = this.value" wrap="off"></textarea>
+		</div>
+		<div id="diddlercssDiv" class="diddlercontainingDiv" style="display: none;">
+		  <textarea id="diddlercssOut" class="diddlerCodeTextarea" onkeyup="document.getElementById('styleBlank').innerHTML = this.value" wrap="off"></textarea>
+		</div>
+		<div id="diddlerhlpDiv" class="diddlercontainingDiv" style="border-color: red; padding: 5px; margin-top: -1px; float: left; display: none; white-space: nowrap; overflow: hidden; height: 166px; width: 394px;">
+				<h1 style="font-size: 114px; line-height: 100px; display: inline; letter-spacing: -15px; color: red;">very beta :)</h1>
+				<br><br>
+				clear the CSS pane if it breaks the page :(<br>
+
+				<div style="clear: left; padding-top: 10px;">Rendar 2.0 by <span id="diddleremail" style="font-weight: bold;">greg gregtaff</span></div><br>
+				
+				
+				
+		  <textarea id="diddlerhlpOut" class="diddlerCodeTextarea" style="display: none;"></textarea>
+		</div>
+
+	<div id="diddlersizer" style="border: 1px solid black; background: white none repeat scroll 0%; clear: left; cursor: se-resize; position: relative; top: -4px; left: 355px; display: block; height: 15px; width: 35px; opacity: 0.6; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;"> </div>
+	</div>
+
+</div></div><body>
+<p>推測をされそうにない(覚えにくい)ランダムなパスワードを作成します。</p>
+
+<h3>シンプルな設定で作る</h3>
+<form action="#" name="frm1">
+<table><tbody><tr><td>
+	パスワードの種(*1)を
+	<input name="seed" maxlength="2" size="3" type="text">
+	にして、
+</td><td>
+	文字数
+	<select name="chrs"><option value="4">4
+	</option><option value="5">5
+	</option><option value="6">6
+	</option><option value="7">7
+	</option><option value="8" selected="selected">8
+	</option><option value="9">9
+	</option><option value="10">10
+	</option><option value="11">11
+	</option><option value="12">12
+	</option><option value="13">13
+	</option><option value="14">14
+	</option><option value="15">15
+	</option><option value="16">16
+	</option><option value="17">17
+	</option><option value="18">18
+	</option><option value="19">19
+	</option><option value="20">20
+	</option></select>
+	文字
+</td><td>
+	<table><tbody><tr><td>
+	<input name="abt" value="fazy" checked="checked" type="radio">ぐらいまで
+	</td></tr><tr><td>
+	<input name="abt" value="just" type="radio">ぴったり
+	</td></tr></tbody></table>
+</td><td>
+	の
+	<input value="パスワードを作る" onclick="mkSimple(this.form)" type="button">
+	。
+</td></tr><tr><td colspan="4">
+	結果はこちら→
+	<input name="result" size="30" type="text">
+</td></tr></tbody></table>
+<p>(*1) 「パスワードの種」はあってもなくても大丈夫です。運気を変えたいときなど気分で入れると良いでしょう。</p>
+</form>
+
+<h3>詳細に設定して作る</h3>
+<form action="#" name="frm2">
+<table><tbody><tr><td colspan="3">
+	<input name="seed" value="" type="hidden">
+	以下の条件で
+	<input value="パスワードを作る" onclick="mkDetailed(this.form)" type="button">
+	。
+	結果はこちら→
+	<input name="result" size="35" type="text">
+</td></tr><tr><td>
+	文字数は
+</td><td>
+	<select name="chrs"><option value="4">4
+	</option><option value="5">5
+	</option><option value="6">6
+	</option><option value="7">7
+	</option><option value="8">8
+	</option><option value="9">9
+	</option><option value="10" selected="selected">10
+	</option><option value="11">11
+	</option><option value="12">12
+	</option><option value="13">13
+	</option><option value="14">14
+	</option><option value="15">15
+	</option><option value="16">16
+	</option><option value="17">17
+	</option><option value="18">18
+	</option><option value="19">19
+	</option><option value="20">20
+	</option></select>
+	文字
+</td><td>
+	<table><tbody><tr><td>
+	<input name="abt" value="fazy" checked="checked" type="radio">ぐらいまで
+	</td></tr><tr><td>
+	<input name="abt" value="just" type="radio">ぴったり
+	</td></tr></tbody></table>
+</td></tr><tr><td>
+	構成される文字の種類は
+</td><td>
+	<input name="typen" value="123" checked="checked" type="checkbox">数字 (123...)<br>
+	<input name="typeu" value="ABC" checked="checked" type="checkbox">アルファベット大文字 (ABC...)<br>
+	<input name="typel" value="abc" checked="checked" type="checkbox">アルファベット小文字 (abc...)<br>
+</td><td>
+	その他の特殊文字を使用する場合はここに列挙<br>
+	<input name="types" size="20" type="text">
+</td></tr></tbody></table>
+</form>
+
+<h3>16進数表示のパスワードを作る</h3>
+<form action="#" name="frm3">
+<table><tbody><tr><td colspan="3">
+	<input name="seed" value="" type="hidden">
+	以下の条件で
+	<input value="パスワードを作る" onclick="mkHexmode(this.form)" type="button">
+	。
+	結果はこちら→
+	<input name="result" size="40" type="text">
+</td></tr><tr><td>
+	バイト数は
+</td><td>
+	<select name="chrs"><option value="4">4
+	</option><option value="5">5
+	</option><option value="6">6
+	</option><option value="7">7
+	</option><option value="8">8
+	</option><option value="9">9
+	</option><option value="10" selected="selected">10
+	</option><option value="11">11
+	</option><option value="12">12
+	</option><option value="13">13
+	</option><option value="14">14
+	</option><option value="15">15
+	</option><option value="16">16
+	</option><option value="17">17
+	</option><option value="18">18
+	</option><option value="19">19
+	</option><option value="20">20
+	</option></select>
+	バイト
+</td><td>
+	<table><tbody><tr><td>
+	<input name="abt" value="fazy" checked="checked" type="radio">ぐらいまで
+	</td></tr><tr><td>
+	<input name="abt" value="just" type="radio">ぴったり
+	</td></tr></tbody></table>
+</td></tr></tbody></table>
+</form>
+
+<h3>大量に作る Σ(ﾟ</h3>
+<form action="#" name="frm4">
+<table><tbody><tr><td>
+	文字/バイト数は
+</td><td>
+	<select name="chrs"><option value="4">4
+	</option><option value="5">5
+	</option><option value="6">6
+	</option><option value="7">7
+	</option><option value="8">8
+	</option><option value="9">9
+	</option><option value="10" selected="selected">10
+	</option><option value="11">11
+	</option><option value="12">12
+	</option><option value="13">13
+	</option><option value="14">14
+	</option><option value="15">15
+	</option><option value="16">16
+	</option><option value="17">17
+	</option><option value="18">18
+	</option><option value="19">19
+	</option><option value="20">20
+	</option></select>
+	文字/バイト
+</td><td>
+	<table><tbody><tr><td>
+	<input name="abt" value="fazy" checked="checked" type="radio">ぐらいまで
+	</td></tr><tr><td>
+	<input name="abt" value="just" type="radio">ぴったり
+	</td></tr></tbody></table>
+</td></tr><tr><td>
+	構成される文字の種類は
+</td><td>
+	<input name="typen" value="123" checked="checked" type="checkbox">数字 (123...)<br>
+	<input name="typeu" value="ABC" checked="checked" type="checkbox">アルファベット大文字 (ABC...)<br>
+	<input name="typel" value="abc" checked="checked" type="checkbox">アルファベット小文字 (abc...)<br>
+</td><td>
+	その他の特殊文字を使用する場合はここに列挙<br>
+	<input name="types" size="20" type="text">
+</td></tr><tr><td>
+	作るパスワードの数は(*2)
+</td><td colspan="2">
+	<select name="num"><option value="10">10
+	</option><option value="16">16
+	</option><option value="20">20
+	</option><option value="32">32
+	</option><option value="50" selected="selected">50
+	</option><option value="64">64
+	</option><option value="100">100
+	</option><option value="128">128
+	</option><option value="200">200
+	</option><option value="256">256
+	</option><option value="500">500
+	</option><option value="512">512
+	</option><option value="1000">1000
+	</option><option value="1024">1024
+	</option></select>
+</td></tr><tr><td colspan="3">
+	<input name="seed" value="" type="hidden">
+	<br>以上の条件で
+	<input value="文字列のパスワードを作る" onclick="mkDetailedbalk(this.form)" type="button">
+	。<br>
+	<br>以上の条件で
+	<input value="16進数のパスワードを作る" onclick="mkHexmodebalk(this.form)" type="button">
+	。<br>
+	<br><textarea name="result" cols="40" rows="10">結果はここに表示</textarea>
+</td></tr></tbody></table>
+<p>(*2) 数が多いときはとても時間がかかることがあります。その場合は待ってください。</p>
+</form>
+
+<!-- 利用者像: パスワードを考えるセンスの無い人(?) 大量にパスワードを作りたい人(?) -->
+</body></html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="正規表現,regex,javascript">
+		<meta name="description" content="javascriptによる正規表現パターン確認ツールです">
+		<title>正規表現チェッカー javascript aid</title>
+		<link rel="stylesheet" href="reset.css">
+		<link rel="stylesheet" href="style.css">
+</head>
+	<body>
+		<div id="wrap">
+			<header>
+				<h1>javascript 正規表現 チェッカー</h1>
+				<p>javascriptを使用して正規表現パターンの確認を行えます。</p>
+			</header>
+			<section class="regex">
+				<p>
+					判定の結果
+					<input type="checkbox" id="chk_wrap">
+					<label for="chk_wrap">折り返す</label>
+				</p>
+				<p id="txt_result" style="white-space: nowrap;"></p>
+				<p id="sec_rsz"></p>
+			</section>
+			<section class="regex">
+				<ul>
+					<li>
+						<label for="txt_pattern">パターン文字列</label>
+						<textarea id="txt_pattern" rows="1"></textarea>
+					</li>
+					<li>
+						<label for="txt_replace">置き換え文字列</label>
+						<textarea id="txt_replace" rows="1"></textarea>
+					</li>
+					<li>
+						<input type="checkbox" id="opt_g" value="g" checked="checked">
+						<label for="opt_g">全文検索(g)</label>&nbsp;
+						<input type="checkbox" id="opt_i" value="i">
+						<label for="opt_i">大文字、小文字の区別なし(i)</label>&nbsp;
+						<input type="checkbox" id="opt_m" value="m" checked="checked">
+						<label for="opt_m">複数行を対象(m)</label>
+					</li>
+					<li>
+						<label for="txt_pattern">対象文字列</label>
+						<textarea id="txt_target" rows="12"></textarea>
+						<p class="ta-r">
+							<button type="button" id="btn-clear" class="btn">clear</button>
+						</p>
+					</li>
+				</ul>
+			</section>
+			<section class="regex">
+				<h3>正規表現文法</h3>
+					<table>
+						<tbody><tr>
+							<th colspan="2">特殊記号</th>
+						</tr>
+						<tr>
+							<td class="cl">.(ドット)</td>
+							<td class="cr">改行以外の任意の1文字を表す</td>
+						</tr>
+						<tr>
+							<td>&nbsp;(半角スペース)</td>
+							<td>1文字分のスペースを表す</td>
+						</tr>
+						<tr>
+							<td>^(ハット)</td>
+							<td>行の先頭を表す</td>
+						</tr>
+						<tr>
+							<td>$(ドル)</td>
+							<td>行末を表す</td>
+						</tr>
+						<tr>
+							<td>|(フェンス)</td>
+							<td>指定したもののいずれか、を表す</td>
+						</tr>
+						<tr>
+							<td>()(括弧)</td>
+							<td>
+								括弧の中の文字列を表す<br>
+								フェンスと組み合わせて次の様に使用する<br>
+								ex:(abc|def|ghi)
+							</td>
+						</tr>
+						<tr>
+							<td>[](ブラケット)</td>
+							<td>囲った範囲の文字のいずれかにマッチする場合を表す</td>
+						</tr>
+						<tr>
+							<td>^(否定演算子)</td>
+							<td>
+								ブラケットの中で使用し、指定した文字以外を意味する<br>
+								"[^A-Z]"では大文字のアルファベット以外を意味する。
+							</td>
+						</tr>
+						<tr>
+							<td>\(バックスラッシュ)</td>
+							<td>
+								直前の1文字の正規表現の意味をエスケープする<br>
+								または¥(円記号)
+							</td>
+						</tr>
+					</tbody></table>
+					<table>
+						<tbody><tr>
+							<th colspan="2">メタシンボル</th>
+						</tr>
+						<tr>
+							<td class="cl">\d</td>
+							<td class="cr">1文字分の数字を表す。"[0-9]"に等しい</td>
+						</tr>
+						<tr>
+							<td>\D</td>
+							<td>数字以外の1文字を表す。"[^0-9]"に等しい</td>
+						</tr>
+						<tr>
+							<td>\w</td>
+							<td>数字とアルファベットかアンダースコア(_)のいずれかを表す。<br>"[0-9a-zA-Z_] "と等しい</td>
+						</tr>
+						<tr>
+							<td>\t</td>
+							<td>1文字分のタブを表す</td>
+						</tr>
+						<tr>
+							<td>\f</td>
+							<td>フォームフィールドを表す</td>
+						</tr>
+						<tr>
+							<td>\r</td>
+							<td>キャリッジリターンを表す</td>
+						</tr>
+						<tr>
+							<td>\n</td>
+							<td>改行記号を表す</td>
+						</tr>
+						<tr>
+							<td>\b</td>
+							<td>単語とスペースの境界を表す</td>
+						</tr>
+						<tr>
+							<td>\B</td>
+							<td>単語がそこで終らないことを意味する</td>
+						</tr>
+						<tr>
+							<td>\s</td>
+							<td>\b,\t,\f,\r,\nのいずれかを表す。"[\b\t\f\r\n]"と等しい</td>
+						</tr>
+						<tr>
+							<td>\S</td>
+							<td>\b,\t,\f,\r,\n以外の1文字を表す。"[^\b\t\f\r\n]"と等しい</td>
+						</tr>
+					</tbody></table>
+					<table>
+						<tbody><tr>
+							<th colspan="2">量数指定</th>
+						</tr>
+						<tr>
+							<td class="cl">*(アスタリスク)</td>
+							<td class="cr">直前の文字を0回以上繰り返した文字列を表す</td>
+						</tr>
+						<tr>
+							<td>+(プラス)</td>
+							<td>直前の文字を1回以上繰り返した文字列を返す</td>
+						</tr>
+						<tr>
+							<td>?(クエスチョン)</td>
+							<td>直前の文字が存在しなくてもいいような場合を表す</td>
+						</tr>
+						<tr>
+							<td>{n}(中括弧)</td>
+							<td>
+								n回繰り返した文字列を表す<br>
+								"{n,m}"ではn回以上、m回以下にマッチし"{n,}"でn回以上にマッチする
+							</td>
+						</tr>
+					</tbody></table>
+					<table>
+						<tbody><tr>
+							<th colspan="2">文字クラス</th>
+						</tr>
+						<tr>
+							<td class="cl">0-9</td>
+							<td class="cr">半角数字0から9いずれかにマッチするex:[0-9]</td>
+						</tr>
+						<tr>
+							<td>a-z</td>
+							<td>半角英数の小文字いずれかにマッチするex:[a-z]</td>
+						</tr>
+						<tr>
+							<td>A-Z</td>
+							<td>半角英数の小文字いずれかにマッチするex:[A-Z]</td>
+						</tr>
+						<tr>
+							<td>0-9a-zA-Z</td>
+							<td>半角英数のいずれかにマッチするex:[0-9a-zA-Z]</td>
+						</tr>
+					</tbody></table>
+			</section>
+			<footer>
+				<div class="ta-r">
+					<small>© wakastream.jp All Right Reserved </small>
+				</div>
+			</footer>
+		</div>
+
+		<script type="text/javascript" src="jquery.min.js"></script>
+		<script type="text/javascript" src="regex.js"></script>
+	
+</body></html>
